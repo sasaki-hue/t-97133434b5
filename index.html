@@ -45,9 +45,9 @@
 <h2>1. 台の状態</h2>
 <div class="card">
   <div class="layer"><div class="h">① 最下点(MYの起点)の有利区間差枚数</div>
-    <select id="sink"><option value="">選んでください</option><option value="s1">−1000 以下</option><option value="s2">−1000〜−500</option><option value="s3">−500 以上</option></select></div>
+    <select id="sink"><option value="s1" selected>−1000 以下</option><option value="s2">−1000〜−500</option><option value="s3">−500 以上</option></select></div>
   <div class="layer"><div class="h">② MY</div>
-    <select id="my"><option value="">選んでください</option><option value="p0">600 未満</option><option value="p1">600〜800</option><option value="p2">800〜1000</option><option value="p3">1000〜1100</option><option value="p4">1100〜1200</option><option value="mx">1200〜1250</option><option value="m1">1250〜1400</option><option value="m2">1400〜1600</option><option value="m3">1600〜1900</option><option value="m9">1900 以上</option></select></div>
+    <select id="my"><option value="p0" selected>600 未満</option><option value="p1">600〜800</option><option value="p2">800〜1000</option><option value="p3">1000〜1100</option><option value="p4">1100〜1200</option><option value="mx">1200〜1250</option><option value="m1">1250〜1400</option><option value="m2">1400〜1600</option><option value="m3">1600〜1900</option><option value="m9">1900 以上</option></select></div>
   <div class="layer"><div class="h">③ ループ回数(MY が 1200 に届いた後に引いた当たりの回数)</div>
     <select id="k"><option value="all">指定なし(全体)</option><option value="0">0 回(点火直後)</option><option value="1">1 回</option><option value="2">2 回</option><option value="3">3 回</option><option value="4">4 回以上</option></select></div>
   <div class="status na" id="gateV">①を選んでください</div>
@@ -16630,6 +16630,549 @@
     }
    },
    "next3": 31.2
+  },
+  {
+   "my": "m9",
+   "sink": "s1",
+   "k": "all",
+   "n": 3449,
+   "pol": "S2",
+   "rows": {
+    "0": {
+     "n": 3373,
+     "ev": 1.8,
+     "roi": 100.15,
+     "g": 394.0,
+     "ignite": null,
+     "hit": 312.0,
+     "ty": 396.0
+    },
+    "50": {
+     "n": 3064,
+     "ev": 69.4,
+     "roi": 106.1,
+     "g": 379.0,
+     "ignite": null,
+     "hit": 269.5,
+     "ty": 397.0
+    },
+    "100": {
+     "n": 2730,
+     "ev": 107.9,
+     "roi": 109.99,
+     "g": 360.0,
+     "ignite": null,
+     "hit": 248.3,
+     "ty": 396.0
+    },
+    "150": {
+     "n": 2043,
+     "ev": 87.9,
+     "roi": 107.49,
+     "g": 392.0,
+     "ignite": null,
+     "hit": 268.8,
+     "ty": 404.0
+    },
+    "200": {
+     "n": 1447,
+     "ev": 51.9,
+     "roi": 103.75,
+     "g": 461.0,
+     "ignite": null,
+     "hit": 312.1,
+     "ty": 423.0
+    },
+    "250": {
+     "n": 1215,
+     "ev": 59.1,
+     "roi": 104.14,
+     "g": 476.0,
+     "ignite": null,
+     "hit": 309.2,
+     "ty": 426.0
+    },
+    "300": {
+     "n": 1095,
+     "ev": 88.1,
+     "roi": 106.4,
+     "g": 459.0,
+     "ignite": null,
+     "hit": 289.0,
+     "ty": 423.0
+    },
+    "350": {
+     "n": 975,
+     "ev": 121.9,
+     "roi": 109.18,
+     "g": 443.0,
+     "ignite": null,
+     "hit": 269.6,
+     "ty": 428.0
+    },
+    "400": {
+     "n": 858,
+     "ev": 137.8,
+     "roi": 110.82,
+     "g": 425.0,
+     "ignite": null,
+     "hit": 252.4,
+     "ty": 424.0
+    },
+    "450": {
+     "n": 730,
+     "ev": 161.2,
+     "roi": 113.11,
+     "g": 410.0,
+     "ignite": null,
+     "hit": 240.3,
+     "ty": 419.0
+    },
+    "500": {
+     "n": 610,
+     "ev": 177.8,
+     "roi": 114.94,
+     "g": 397.0,
+     "ignite": null,
+     "hit": 232.4,
+     "ty": 433.0
+    },
+    "550": {
+     "n": 517,
+     "ev": 213.6,
+     "roi": 118.8,
+     "g": 379.0,
+     "ignite": null,
+     "hit": 220.1,
+     "ty": 435.0
+    },
+    "600": {
+     "n": 444,
+     "ev": 213.3,
+     "roi": 119.66,
+     "g": 362.0,
+     "ignite": null,
+     "hit": 201.1,
+     "ty": 435.0
+    },
+    "650": {
+     "n": 375,
+     "ev": 245.4,
+     "roi": 123.52,
+     "g": 348.0,
+     "ignite": null,
+     "hit": 183.8,
+     "ty": 444.0
+    },
+    "700": {
+     "n": 309,
+     "ev": 265.0,
+     "roi": 126.67,
+     "g": 331.0,
+     "ignite": null,
+     "hit": 166.9,
+     "ty": 449.0
+    },
+    "750": {
+     "n": 262,
+     "ev": 273.3,
+     "roi": 128.91,
+     "g": 315.0,
+     "ignite": null,
+     "hit": 142.3,
+     "ty": 449.0
+    },
+    "800": {
+     "n": 207,
+     "ev": 295.6,
+     "roi": 135.66,
+     "g": 276.0,
+     "ignite": null,
+     "hit": 121.7,
+     "ty": 436.0
+    },
+    "850": {
+     "n": 162,
+     "ev": 331.3,
+     "roi": 143.73,
+     "g": 253.0,
+     "ignite": null,
+     "hit": 100.0,
+     "ty": 411.0
+    },
+    "900": {
+     "n": 125,
+     "ev": 364.4,
+     "roi": 157.59,
+     "g": 211.0,
+     "ignite": null,
+     "hit": 70.9,
+     "ty": 436.0
+    },
+    "950": {
+     "n": 87,
+     "ev": 463.7,
+     "roi": 183.05,
+     "g": 186.0,
+     "ignite": null,
+     "hit": 43.4,
+     "ty": 444.0
+    },
+    "1000": {
+     "n": 50,
+     "ev": 379.7,
+     "roi": 226.55,
+     "g": 100.0,
+     "ignite": null,
+     "hit": 9.6,
+     "ty": 420.0
+    }
+   },
+   "next3": 30.9
+  },
+  {
+   "my": "m9",
+   "sink": "s2",
+   "k": "all",
+   "n": 837,
+   "pol": "S2",
+   "rows": {
+    "0": {
+     "n": 826,
+     "ev": -40.2,
+     "roi": 97.32,
+     "g": 500.0,
+     "ignite": null,
+     "hit": 364.9,
+     "ty": 375.0
+    },
+    "50": {
+     "n": 784,
+     "ev": 21.3,
+     "roi": 101.5,
+     "g": 474.0,
+     "ignite": null,
+     "hit": 326.1,
+     "ty": 378.0
+    },
+    "100": {
+     "n": 728,
+     "ev": 56.3,
+     "roi": 104.15,
+     "g": 452.0,
+     "ignite": null,
+     "hit": 298.4,
+     "ty": 376.0
+    },
+    "150": {
+     "n": 599,
+     "ev": 68.8,
+     "roi": 104.9,
+     "g": 468.0,
+     "ignite": null,
+     "hit": 303.3,
+     "ty": 381.0
+    },
+    "200": {
+     "n": 493,
+     "ev": 82.7,
+     "roi": 105.56,
+     "g": 496.0,
+     "ignite": null,
+     "hit": 312.5,
+     "ty": 390.0
+    },
+    "250": {
+     "n": 435,
+     "ev": 119.2,
+     "roi": 108.05,
+     "g": 493.0,
+     "ignite": null,
+     "hit": 301.7,
+     "ty": 396.0
+    },
+    "300": {
+     "n": 381,
+     "ev": 135.6,
+     "roi": 109.35,
+     "g": 483.0,
+     "ignite": null,
+     "hit": 289.1,
+     "ty": 391.0
+    },
+    "350": {
+     "n": 336,
+     "ev": 137.1,
+     "roi": 109.83,
+     "g": 465.0,
+     "ignite": null,
+     "hit": 274.0,
+     "ty": 393.0
+    },
+    "400": {
+     "n": 300,
+     "ev": 164.5,
+     "roi": 112.02,
+     "g": 456.0,
+     "ignite": null,
+     "hit": 252.9,
+     "ty": 399.0
+    },
+    "450": {
+     "n": 250,
+     "ev": 177.6,
+     "roi": 112.93,
+     "g": 458.0,
+     "ignite": null,
+     "hit": 247.2,
+     "ty": 406.0
+    },
+    "500": {
+     "n": 214,
+     "ev": 194.4,
+     "roi": 114.52,
+     "g": 447.0,
+     "ignite": null,
+     "hit": 236.2,
+     "ty": 412.0
+    },
+    "550": {
+     "n": 175,
+     "ev": 218.2,
+     "roi": 118.38,
+     "g": 396.0,
+     "ignite": null,
+     "hit": 232.5,
+     "ty": 440.0
+    },
+    "600": {
+     "n": 151,
+     "ev": 244.0,
+     "roi": 122.06,
+     "g": 369.0,
+     "ignite": null,
+     "hit": 214.8,
+     "ty": 456.0
+    },
+    "650": {
+     "n": 130,
+     "ev": 257.1,
+     "roi": 124.25,
+     "g": 353.0,
+     "ignite": null,
+     "hit": 193.7,
+     "ty": 443.0
+    },
+    "700": {
+     "n": 116,
+     "ev": 291.5,
+     "roi": 129.38,
+     "g": 331.0,
+     "ignite": null,
+     "hit": 163.7,
+     "ty": 446.0
+    },
+    "750": {
+     "n": 96,
+     "ev": 280.5,
+     "roi": 128.45,
+     "g": 329.0,
+     "ignite": null,
+     "hit": 140.4,
+     "ty": 432.0
+    },
+    "800": {
+     "n": 81,
+     "ev": 346.2,
+     "roi": 135.14,
+     "g": 328.0,
+     "ignite": null,
+     "hit": 111.1,
+     "ty": 429.0
+    },
+    "850": {
+     "n": 53,
+     "ev": 338.6,
+     "roi": 132.57,
+     "g": 346.0,
+     "ignite": null,
+     "hit": 107.6,
+     "ty": 436.0
+    },
+    "900": {
+     "n": 45,
+     "ev": 457.7,
+     "roi": 149.58,
+     "g": 308.0,
+     "ignite": null,
+     "hit": 72.7,
+     "ty": 440.0
+    },
+    "950": {
+     "n": 33,
+     "ev": 399.6,
+     "roi": 147.01,
+     "g": 283.0,
+     "ignite": null,
+     "hit": 41.4,
+     "ty": 411.0
+    }
+   },
+   "next3": 27.6
+  },
+  {
+   "my": "m9",
+   "sink": "s3",
+   "k": "all",
+   "n": 322,
+   "pol": "S2",
+   "rows": {
+    "0": {
+     "n": 319,
+     "ev": 0.8,
+     "roi": 100.06,
+     "g": 430.0,
+     "ignite": null,
+     "hit": 322.8,
+     "ty": 333.0
+    },
+    "50": {
+     "n": 304,
+     "ev": 74.2,
+     "roi": 106.19,
+     "g": 400.0,
+     "ignite": null,
+     "hit": 279.0,
+     "ty": 338.0
+    },
+    "100": {
+     "n": 271,
+     "ev": 90.3,
+     "roi": 107.75,
+     "g": 388.0,
+     "ignite": null,
+     "hit": 257.5,
+     "ty": 336.0
+    },
+    "150": {
+     "n": 210,
+     "ev": 22.0,
+     "roi": 101.81,
+     "g": 405.0,
+     "ignite": null,
+     "hit": 272.8,
+     "ty": 342.0
+    },
+    "200": {
+     "n": 142,
+     "ev": -69.2,
+     "roi": 95.19,
+     "g": 479.0,
+     "ignite": null,
+     "hit": 329.0,
+     "ty": 347.0
+    },
+    "250": {
+     "n": 121,
+     "ev": -68.5,
+     "roi": 95.33,
+     "g": 488.0,
+     "ignite": null,
+     "hit": 327.1,
+     "ty": 333.0
+    },
+    "300": {
+     "n": 111,
+     "ev": -29.1,
+     "roi": 97.95,
+     "g": 474.0,
+     "ignite": null,
+     "hit": 305.9,
+     "ty": 345.0
+    },
+    "350": {
+     "n": 99,
+     "ev": 18.5,
+     "roi": 101.35,
+     "g": 457.0,
+     "ignite": null,
+     "hit": 292.7,
+     "ty": 343.0
+    },
+    "400": {
+     "n": 86,
+     "ev": 29.9,
+     "roi": 102.26,
+     "g": 442.0,
+     "ignite": null,
+     "hit": 281.9,
+     "ty": 338.0
+    },
+    "450": {
+     "n": 74,
+     "ev": 21.2,
+     "roi": 101.56,
+     "g": 455.0,
+     "ignite": null,
+     "hit": 272.7,
+     "ty": 335.0
+    },
+    "500": {
+     "n": 67,
+     "ev": 87.6,
+     "roi": 107.0,
+     "g": 417.0,
+     "ignite": null,
+     "hit": 250.8,
+     "ty": 340.0
+    },
+    "550": {
+     "n": 61,
+     "ev": 123.5,
+     "roi": 111.03,
+     "g": 373.0,
+     "ignite": null,
+     "hit": 225.2,
+     "ty": 344.0
+    },
+    "600": {
+     "n": 57,
+     "ev": 180.9,
+     "roi": 117.97,
+     "g": 335.0,
+     "ignite": null,
+     "hit": 191.0,
+     "ty": 356.0
+    },
+    "650": {
+     "n": 49,
+     "ev": 223.8,
+     "roi": 126.93,
+     "g": 277.0,
+     "ignite": null,
+     "hit": 171.7,
+     "ty": 357.0
+    },
+    "700": {
+     "n": 41,
+     "ev": 271.5,
+     "roi": 134.85,
+     "g": 260.0,
+     "ignite": null,
+     "hit": 153.3,
+     "ty": 350.0
+    },
+    "750": {
+     "n": 35,
+     "ev": 303.7,
+     "roi": 142.76,
+     "g": 237.0,
+     "ignite": null,
+     "hit": 133.0,
+     "ty": 312.0
+    }
+   },
+   "next3": 25.2
   }
  ],
  "grid_my": [
@@ -16702,6 +17245,13 @@
    "lo": 1200,
    "hi": 1900,
    "pol": "S2"
+  },
+  {
+   "code": "m9",
+   "label": "1900 以上",
+   "lo": 1900,
+   "hi": 99999,
+   "pol": "S2"
   }
  ]
 }</script>
@@ -16730,8 +17280,7 @@ function render() {
   const pre0 = my && MYL[my] && MYL[my].pol === 'B';
   $('k').disabled = !my || pre0 || my === 'm9'; if ($('k').disabled) $('k').value = 'all';
   const kk = $('k').value;
-  $('my').disabled = sk === 's3'; if (sk === 's3') { $('my').value = ''; $('k').disabled = true; $('k').value = 'all'; }
-  if (!sk) { gv.className = 'status na'; gv.textContent = '①を選んでください'; clear_(); return; }
+  $('my').disabled = sk === 's3'; if (sk === 's3') { $('k').disabled = true; $('k').value = 'all'; }
   if (sk === 's3') {   // 門の外: MY を問わず 1200〜1900 全体の表(弱さの確認用)
     const e = GR['mall|s3|all'], r0 = e.rows[0] || e.rows['0'];
     gv.className = 'status stop'; gv.textContent = '最下点 −500 以上: ループは立ち上がらない(通常の台と同じ)。MY に関係なく対象外';
@@ -16741,19 +17290,18 @@ function render() {
     $('kmBox').innerHTML = kmTable(e.rows, false) + '<p class="sub">最下点が −500 より浅い台は MY が帯の中でもループが立ち上がらない。深い着席G でプラスになるのはハマり台としての価値(通常の台と同じ)。</p>';
     return;
   }
-  if (my === 'm9') { gv.className = 'status stop'; gv.textContent = 'MY 1900 以上: 上限到達。ヤメ(この後は通常の台に戻る)'; clear_(); return; }
-  if (!my) { gv.className = 'status na'; gv.textContent = '②を選んでください'; clear_(); return; }
   const e = GR[my + '|' + sk + '|' + kk], pre = MYL[my].pol === 'B', gateOK = sk === 's1' || sk === 's2';
   if (!e || !e.rows) { gv.className = 'status na'; gv.textContent = `この組み合わせは該当が少なく表なし(本形式 n=${e ? e.n : 0})。③を「指定なし」にすると全体の表`; clear_(); return; }
   const r0 = e.rows[0] || e.rows['0'];
   if (!gateOK) { gv.className = 'status stop'; gv.textContent = `最下点 ${SKL[sk]}: ループは立ち上がらない(通常の台と同じ)`; }
   else if (pre) { gv.className = 'status wait'; gv.textContent = `MY ${MYL[my].label}: 未点火。1200 到達狙い`; }
+  else if (my === 'm9') { gv.className = 'status stop'; gv.textContent = 'MY 1900 以上: 上限到達。ヤメ(この後は通常の台に戻る)。下は続けた場合の参考'; }
   else if (my === 'mx') { gv.className = 'status wait'; gv.textContent = 'MY 1200〜1250: 誤差で未達が混ざる帯'; }
   else { gv.className = 'status go'; gv.textContent = `MY ${MYL[my].label}・最下点 ${SKL[sk]}${kk === 'all' ? '' : '・ループ ' + (kk === '4' ? '4 回以上' : kk + ' 回')}: ループ狙い`; }
   const third = pre ? [`${r0.ignite == null ? '—' : r0.ignite.toFixed(0) + '%'}`, '1200 に届く率', r0.ignite >= 30 ? 'pos' : r0.ignite < 10 ? 'neg' : ''] : [`${e.next3 == null ? '—' : e.next3.toFixed(0) + '%'}`, '次が3連以上', e.next3 >= 60 ? 'pos' : e.next3 < 45 ? 'neg' : ''];
   $('kpi').innerHTML = [[yen(r0.ev), `0G 着席の期待値(${fmt(r0.ev)}枚)`, cls(r0.ev)], [`${r0.roi.toFixed(1)}%`, `ROI(投資 ${Math.round(r0.g)}G)`, rcls(r0.roi)], third].map(([a, b, c]) => `<div class="${c}"><span class="v">${a}</span><span class="k">${b}</span></div>`).join('');
   $('kpiSub').textContent = `本形式9日 n=${r0.n.toLocaleString()}${kk === 'all' ? '' : '(ループ ' + (kk === '4' ? '4 回以上' : kk + ' 回') + ' の席)'}。最適と思われる打ち方で最後まで打った場合の純増(繋ぎ 8G 込み)。`;
-  $('ruleLine').style.display = ''; $('ruleLine').textContent = pre ? RULE_B + ' ' + RULE_S2 : RULE_S2;
+  $('ruleLine').style.display = ''; $('ruleLine').textContent = (my === 'm9' ? '参考(採用案では 1900 到達でヤメ)。続けた場合: ' : '') + (pre ? RULE_B + ' ' + RULE_S2 : RULE_S2);
   $('kmBox').innerHTML = kmTable(e.rows, pre) + `<p class="sub">着席G = その時点から打ち始めた場合(それまでの消化分は含まない)。初当り${pre ? '' : '・RUSH_TY'}は 1 回目の当たりの KM 値${pre ? '、点火率 = その席から 1200 に届く率' : ''}。</p>`;
 }
 $('terms').innerHTML = `<b>MY</b>: 底(最下点)から現在までの当日差枚の上げ幅。1200 で点火、1900 でヤメ(真の上限は 2000、推定は 50 枚ほど低く出る)。<br>
