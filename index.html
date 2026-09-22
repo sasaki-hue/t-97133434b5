@@ -46,7 +46,7 @@
 <h2>1. 台の状態</h2>
 <div class="card">
   <div class="layer"><div class="h">① MY</div>
-    <select id="my"><option value="">選んでください</option><option value="m0">1200 未満(未点火)</option><option value="mx">1200〜1250(誤差帯)</option><option value="m1">1250〜1400</option><option value="m2">1400〜1600</option><option value="m3">1600〜1900</option><option value="m9">1900 以上(上限)</option></select>
+    <select id="my"><option value="">選んでください</option><option value="p0">600 未満</option><option value="p1">600〜800</option><option value="p2">800〜1000</option><option value="p3">1000〜1100</option><option value="p4">1100〜1200</option><option value="mx">1200〜1250(誤差帯)</option><option value="m1">1250〜1400</option><option value="m2">1400〜1600</option><option value="m3">1600〜1900</option><option value="m9">1900 以上(上限)</option></select>
     <div class="sub">底 = 基準点(朝イチ 0、または当日の切断時点)以降の当日差枚の最安値。1200 で点火、1900 でヤメ。</div></div>
   <div class="layer"><div class="h">② 最下点(MYの起点)の有利区間差枚数</div>
     <select id="sink"><option value="">選んでください</option><option value="s1">−1000 以下</option><option value="s2">−1000〜−500</option><option value="s3">−500〜0</option><option value="s4">0 以上(沈みなし)</option></select>
@@ -86,7 +86,7 @@
 </div>
 
 <details><summary>入口の成績(初めて 1200 に届いた直後に座る)</summary><div class="card" id="entryBox"></div></details>
-<details open><summary>期待値表(着席G別、MY 1200〜1900 でハマっている台に座る)</summary><div class="card" id="kmBox"></div></details>
+<details open><summary id="kmTitle">期待値表(着席G別、MY 1200〜1900 でハマっている台に座る)</summary><div class="card" id="kmBox"></div></details>
 <details><summary>状態の一覧(本形式9日)</summary><div class="card" id="stateTable"></div></details>
 <details><summary>用語・採用案・注意</summary><div class="card note" style="display:block" id="terms"></div></details>
 </div>
@@ -2726,7 +2726,839 @@
     }
    }
   }
- }
+ },
+ "pre": [
+  {
+   "code": "p0",
+   "label": "600 未満",
+   "lo": 0,
+   "hi": 600,
+   "n_km": 39902,
+   "km": {
+    "0": {
+     "n": 39902,
+     "hit": 390.5,
+     "ty": 437.0,
+     "ev": -154.3,
+     "roi": 90.55
+    },
+    "50": {
+     "n": 37481,
+     "hit": 351.2,
+     "ty": 438.0,
+     "ev": -94.9,
+     "roi": 93.74
+    },
+    "100": {
+     "n": 34789,
+     "hit": 325.2,
+     "ty": 440.0,
+     "ev": -54.6,
+     "roi": 96.21
+    },
+    "150": {
+     "n": 29772,
+     "hit": 321.2,
+     "ty": 447.0,
+     "ev": -42.0,
+     "roi": 97.07
+    },
+    "200": {
+     "n": 24818,
+     "hit": 324.1,
+     "ty": 454.0,
+     "ev": -38.4,
+     "roi": 97.36
+    },
+    "250": {
+     "n": 21908,
+     "hit": 310.4,
+     "ty": 460.0,
+     "ev": -12.1,
+     "roi": 99.15
+    },
+    "300": {
+     "n": 19670,
+     "hit": 291.8,
+     "ty": 463.0,
+     "ev": 18.1,
+     "roi": 101.33
+    },
+    "350": {
+     "n": 17560,
+     "hit": 273.4,
+     "ty": 467.0,
+     "ev": 49.3,
+     "roi": 103.76
+    },
+    "400": {
+     "n": 15351,
+     "hit": 258.9,
+     "ty": 470.0,
+     "ev": 74.1,
+     "roi": 105.83
+    },
+    "450": {
+     "n": 13231,
+     "hit": 246.2,
+     "ty": 473.0,
+     "ev": 95.6,
+     "roi": 107.74
+    },
+    "500": {
+     "n": 11348,
+     "hit": 232.5,
+     "ty": 475.0,
+     "ev": 118.6,
+     "roi": 109.91
+    },
+    "550": {
+     "n": 9712,
+     "hit": 217.4,
+     "ty": 479.0,
+     "ev": 144.1,
+     "roi": 112.48
+    },
+    "600": {
+     "n": 8276,
+     "hit": 200.9,
+     "ty": 482.0,
+     "ev": 172.0,
+     "roi": 115.51
+    },
+    "650": {
+     "n": 7039,
+     "hit": 181.8,
+     "ty": 482.0,
+     "ev": 200.1,
+     "roi": 119.04
+    },
+    "700": {
+     "n": 5886,
+     "hit": 162.8,
+     "ty": 483.0,
+     "ev": 229.9,
+     "roi": 123.09
+    },
+    "750": {
+     "n": 4840,
+     "hit": 142.7,
+     "ty": 483.0,
+     "ev": 259.1,
+     "roi": 127.72
+    },
+    "800": {
+     "n": 3869,
+     "hit": 122.8,
+     "ty": 481.0,
+     "ev": 287.4,
+     "roi": 132.89
+    },
+    "850": {
+     "n": 3030,
+     "hit": 99.8,
+     "ty": 480.0,
+     "ev": 319.8,
+     "roi": 139.81
+    },
+    "900": {
+     "n": 2266,
+     "hit": 75.5,
+     "ty": 482.0,
+     "ev": 358.0,
+     "roi": 148.89
+    },
+    "950": {
+     "n": 1586,
+     "hit": 47.5,
+     "ty": 483.0,
+     "ev": 401.0,
+     "roi": 161.71
+    },
+    "1000": {
+     "n": 1035,
+     "hit": 9.9,
+     "ty": 468.0,
+     "ev": 441.3,
+     "roi": 184.59
+    }
+   },
+   "reach": {
+    "n": 37495,
+    "net": -91.1,
+    "g": 408.2,
+    "roi": 92.57,
+    "ignite": 3.7,
+    "lose": 65.2,
+    "one": -151.8,
+    "cap": 2.3
+   }
+  },
+  {
+   "code": "p1",
+   "label": "600〜800",
+   "lo": 600,
+   "hi": 800,
+   "n_km": 6757,
+   "km": {
+    "0": {
+     "n": 6757,
+     "hit": 387.2,
+     "ty": 427.0,
+     "ev": -159.2,
+     "roi": 90.13
+    },
+    "50": {
+     "n": 6307,
+     "hit": 346.6,
+     "ty": 430.0,
+     "ev": -96.3,
+     "roi": 93.56
+    },
+    "100": {
+     "n": 5843,
+     "hit": 320.8,
+     "ty": 432.0,
+     "ev": -55.9,
+     "roi": 96.06
+    },
+    "150": {
+     "n": 4914,
+     "hit": 322.3,
+     "ty": 438.0,
+     "ev": -51.8,
+     "roi": 96.37
+    },
+    "200": {
+     "n": 4052,
+     "hit": 329.8,
+     "ty": 452.0,
+     "ev": -49.3,
+     "roi": 96.64
+    },
+    "250": {
+     "n": 3564,
+     "hit": 317.9,
+     "ty": 459.0,
+     "ev": -24.1,
+     "roi": 98.32
+    },
+    "300": {
+     "n": 3243,
+     "hit": 295.9,
+     "ty": 463.0,
+     "ev": 12.4,
+     "roi": 100.9
+    },
+    "350": {
+     "n": 2897,
+     "hit": 278.5,
+     "ty": 466.0,
+     "ev": 41.4,
+     "roi": 103.12
+    },
+    "400": {
+     "n": 2553,
+     "hit": 261.4,
+     "ty": 471.0,
+     "ev": 71.8,
+     "roi": 105.61
+    },
+    "450": {
+     "n": 2207,
+     "hit": 249.0,
+     "ty": 475.0,
+     "ev": 93.3,
+     "roi": 107.49
+    },
+    "500": {
+     "n": 1907,
+     "hit": 233.8,
+     "ty": 481.0,
+     "ev": 122.0,
+     "roi": 110.11
+    },
+    "550": {
+     "n": 1643,
+     "hit": 216.9,
+     "ty": 489.0,
+     "ev": 155.7,
+     "roi": 113.38
+    },
+    "600": {
+     "n": 1407,
+     "hit": 199.5,
+     "ty": 492.0,
+     "ev": 184.4,
+     "roi": 116.54
+    },
+    "650": {
+     "n": 1183,
+     "hit": 183.0,
+     "ty": 485.0,
+     "ev": 201.8,
+     "roi": 119.07
+    },
+    "700": {
+     "n": 1017,
+     "hit": 158.4,
+     "ty": 486.0,
+     "ev": 239.0,
+     "roi": 124.27
+    },
+    "750": {
+     "n": 817,
+     "hit": 140.7,
+     "ty": 484.0,
+     "ev": 263.3,
+     "roi": 128.31
+    },
+    "800": {
+     "n": 659,
+     "hit": 119.1,
+     "ty": 498.0,
+     "ev": 309.8,
+     "roi": 135.22
+    },
+    "850": {
+     "n": 503,
+     "hit": 98.8,
+     "ty": 495.0,
+     "ev": 336.7,
+     "roi": 141.29
+    },
+    "900": {
+     "n": 382,
+     "hit": 72.8,
+     "ty": 488.0,
+     "ev": 368.2,
+     "roi": 150.4
+    },
+    "950": {
+     "n": 262,
+     "hit": 45.6,
+     "ty": 476.0,
+     "ev": 397.0,
+     "roi": 162.3
+    },
+    "1000": {
+     "n": 161,
+     "hit": 9.9,
+     "ty": 449.0,
+     "ev": 422.1,
+     "roi": 184.06
+    }
+   },
+   "reach": {
+    "n": 6338,
+    "net": -59.6,
+    "g": 421.4,
+    "roi": 95.29,
+    "ignite": 7.4,
+    "lose": 65.6,
+    "one": -170.0,
+    "cap": 4.6
+   }
+  },
+  {
+   "code": "p2",
+   "label": "800〜1000",
+   "lo": 800,
+   "hi": 1000,
+   "n_km": 4577,
+   "km": {
+    "0": {
+     "n": 4577,
+     "hit": 368.9,
+     "ty": 415.0,
+     "ev": -144.2,
+     "roi": 90.67
+    },
+    "50": {
+     "n": 4270,
+     "hit": 328.3,
+     "ty": 417.0,
+     "ev": -81.9,
+     "roi": 94.25
+    },
+    "100": {
+     "n": 3938,
+     "hit": 301.9,
+     "ty": 417.0,
+     "ev": -42.3,
+     "roi": 96.86
+    },
+    "150": {
+     "n": 3209,
+     "hit": 310.4,
+     "ty": 427.0,
+     "ev": -45.1,
+     "roi": 96.74
+    },
+    "200": {
+     "n": 2537,
+     "hit": 327.7,
+     "ty": 440.0,
+     "ev": -58.0,
+     "roi": 95.99
+    },
+    "250": {
+     "n": 2246,
+     "hit": 313.5,
+     "ty": 447.0,
+     "ev": -30.0,
+     "roi": 97.88
+    },
+    "300": {
+     "n": 2034,
+     "hit": 292.7,
+     "ty": 454.0,
+     "ev": 7.9,
+     "roi": 100.58
+    },
+    "350": {
+     "n": 1800,
+     "hit": 276.8,
+     "ty": 462.0,
+     "ev": 39.8,
+     "roi": 103.02
+    },
+    "400": {
+     "n": 1609,
+     "hit": 256.1,
+     "ty": 465.0,
+     "ev": 73.4,
+     "roi": 105.84
+    },
+    "450": {
+     "n": 1380,
+     "hit": 245.7,
+     "ty": 467.0,
+     "ev": 90.9,
+     "roi": 107.4
+    },
+    "500": {
+     "n": 1176,
+     "hit": 232.6,
+     "ty": 467.0,
+     "ev": 110.1,
+     "roi": 109.26
+    },
+    "550": {
+     "n": 1003,
+     "hit": 218.4,
+     "ty": 472.0,
+     "ev": 135.8,
+     "roi": 111.8
+    },
+    "600": {
+     "n": 864,
+     "hit": 199.5,
+     "ty": 473.0,
+     "ev": 165.0,
+     "roi": 115.06
+    },
+    "650": {
+     "n": 734,
+     "hit": 180.9,
+     "ty": 485.0,
+     "ev": 205.0,
+     "roi": 119.49
+    },
+    "700": {
+     "n": 616,
+     "hit": 161.6,
+     "ty": 483.0,
+     "ev": 231.8,
+     "roi": 123.37
+    },
+    "750": {
+     "n": 507,
+     "hit": 141.2,
+     "ty": 494.0,
+     "ev": 272.6,
+     "roi": 128.95
+    },
+    "800": {
+     "n": 391,
+     "hit": 125.8,
+     "ty": 491.0,
+     "ev": 292.2,
+     "roi": 132.75
+    },
+    "850": {
+     "n": 316,
+     "hit": 98.8,
+     "ty": 488.0,
+     "ev": 329.8,
+     "roi": 140.79
+    },
+    "900": {
+     "n": 234,
+     "hit": 76.1,
+     "ty": 483.0,
+     "ev": 358.5,
+     "roi": 148.75
+    },
+    "950": {
+     "n": 162,
+     "hit": 48.5,
+     "ty": 472.0,
+     "ev": 387.8,
+     "roi": 160.48
+    },
+    "1000": {
+     "n": 114,
+     "hit": 9.8,
+     "ty": 502.0,
+     "ev": 476.0,
+     "roi": 185.66
+    }
+   },
+   "reach": {
+    "n": 4287,
+    "net": -27.2,
+    "g": 425.2,
+    "roi": 97.86,
+    "ignite": 12.2,
+    "lose": 64.5,
+    "one": -181.2,
+    "cap": 6.9
+   }
+  },
+  {
+   "code": "p3",
+   "label": "1000〜1100",
+   "lo": 1000,
+   "hi": 1100,
+   "n_km": 1645,
+   "km": {
+    "0": {
+     "n": 1645,
+     "hit": 351.7,
+     "ty": 389.0,
+     "ev": -144.9,
+     "roi": 90.13
+    },
+    "50": {
+     "n": 1538,
+     "hit": 309.1,
+     "ty": 387.0,
+     "ev": -83.6,
+     "roi": 93.75
+    },
+    "100": {
+     "n": 1405,
+     "hit": 285.4,
+     "ty": 389.0,
+     "ev": -46.4,
+     "roi": 96.35
+    },
+    "150": {
+     "n": 1134,
+     "hit": 296.5,
+     "ty": 401.0,
+     "ev": -51.2,
+     "roi": 96.11
+    },
+    "200": {
+     "n": 875,
+     "hit": 318.0,
+     "ty": 417.0,
+     "ev": -67.0,
+     "roi": 95.2
+    },
+    "250": {
+     "n": 764,
+     "hit": 306.6,
+     "ty": 418.0,
+     "ev": -48.7,
+     "roi": 96.43
+    },
+    "300": {
+     "n": 668,
+     "hit": 295.5,
+     "ty": 424.0,
+     "ev": -25.9,
+     "roi": 98.06
+    },
+    "350": {
+     "n": 597,
+     "hit": 275.9,
+     "ty": 433.0,
+     "ev": 12.1,
+     "roi": 100.94
+    },
+    "400": {
+     "n": 528,
+     "hit": 259.3,
+     "ty": 431.0,
+     "ev": 34.8,
+     "roi": 102.82
+    },
+    "450": {
+     "n": 462,
+     "hit": 240.4,
+     "ty": 431.0,
+     "ev": 62.6,
+     "roi": 105.32
+    },
+    "500": {
+     "n": 388,
+     "hit": 233.6,
+     "ty": 419.0,
+     "ev": 60.8,
+     "roi": 105.31
+    },
+    "550": {
+     "n": 332,
+     "hit": 217.8,
+     "ty": 427.0,
+     "ev": 92.3,
+     "roi": 108.35
+    },
+    "600": {
+     "n": 286,
+     "hit": 198.8,
+     "ty": 433.0,
+     "ev": 125.7,
+     "roi": 111.94
+    },
+    "650": {
+     "n": 233,
+     "hit": 188.8,
+     "ty": 436.0,
+     "ev": 143.6,
+     "roi": 114.0
+    },
+    "700": {
+     "n": 206,
+     "hit": 158.4,
+     "ty": 441.0,
+     "ev": 194.2,
+     "roi": 120.65
+    },
+    "750": {
+     "n": 160,
+     "hit": 148.5,
+     "ty": 435.0,
+     "ev": 203.3,
+     "roi": 122.46
+    },
+    "800": {
+     "n": 123,
+     "hit": 135.8,
+     "ty": 430.0,
+     "ev": 216.6,
+     "roi": 125.15
+    },
+    "850": {
+     "n": 106,
+     "hit": 105.0,
+     "ty": 418.0,
+     "ev": 250.6,
+     "roi": 133.1
+    },
+    "900": {
+     "n": 82,
+     "hit": 78.2,
+     "ty": 432.0,
+     "ev": 304.0,
+     "roi": 144.03
+    },
+    "950": {
+     "n": 60,
+     "hit": 47.2,
+     "ty": 393.0,
+     "ev": 311.5,
+     "roi": 155.74
+    },
+    "1000": {
+     "n": 40,
+     "hit": 9.7,
+     "ty": 343.0,
+     "ev": 316.8,
+     "roi": 179.94
+    }
+   },
+   "reach": {
+    "n": 1550,
+    "net": 44.3,
+    "g": 460.5,
+    "roi": 103.2,
+    "ignite": 20.6,
+    "lose": 66.1,
+    "one": -200.5,
+    "cap": 10.8
+   }
+  },
+  {
+   "code": "p4",
+   "label": "1100〜1200",
+   "lo": 1100,
+   "hi": 1200,
+   "n_km": 1272,
+   "km": {
+    "0": {
+     "n": 1272,
+     "hit": 320.4,
+     "ty": 453.0,
+     "ev": -34.3,
+     "roi": 97.61
+    },
+    "50": {
+     "n": 1187,
+     "hit": 277.8,
+     "ty": 454.0,
+     "ev": 29.6,
+     "roi": 102.26
+    },
+    "100": {
+     "n": 1060,
+     "hit": 256.8,
+     "ty": 457.0,
+     "ev": 64.0,
+     "roi": 105.12
+    },
+    "150": {
+     "n": 816,
+     "hit": 272.8,
+     "ty": 472.0,
+     "ev": 55.6,
+     "roi": 104.23
+    },
+    "200": {
+     "n": 593,
+     "hit": 308.7,
+     "ty": 487.0,
+     "ev": 16.7,
+     "roi": 101.16
+    },
+    "250": {
+     "n": 509,
+     "hit": 301.8,
+     "ty": 490.0,
+     "ev": 30.7,
+     "roi": 102.16
+    },
+    "300": {
+     "n": 454,
+     "hit": 283.7,
+     "ty": 485.0,
+     "ev": 52.7,
+     "roi": 103.87
+    },
+    "350": {
+     "n": 402,
+     "hit": 267.2,
+     "ty": 488.0,
+     "ev": 80.0,
+     "roi": 106.09
+    },
+    "400": {
+     "n": 352,
+     "hit": 250.4,
+     "ty": 489.0,
+     "ev": 105.1,
+     "roi": 108.31
+    },
+    "450": {
+     "n": 303,
+     "hit": 234.9,
+     "ty": 495.0,
+     "ev": 134.4,
+     "roi": 110.98
+    },
+    "500": {
+     "n": 251,
+     "hit": 229.1,
+     "ty": 498.0,
+     "ev": 146.5,
+     "roi": 112.11
+    },
+    "550": {
+     "n": 219,
+     "hit": 208.6,
+     "ty": 495.0,
+     "ev": 173.3,
+     "roi": 115.14
+    },
+    "600": {
+     "n": 187,
+     "hit": 191.7,
+     "ty": 490.0,
+     "ev": 193.9,
+     "roi": 117.8
+    },
+    "650": {
+     "n": 156,
+     "hit": 173.9,
+     "ty": 501.0,
+     "ev": 231.4,
+     "roi": 122.1
+    },
+    "700": {
+     "n": 127,
+     "hit": 159.4,
+     "ty": 478.0,
+     "ev": 229.9,
+     "roi": 123.45
+    },
+    "750": {
+     "n": 103,
+     "hit": 139.4,
+     "ty": 480.0,
+     "ev": 261.4,
+     "roi": 128.35
+    },
+    "800": {
+     "n": 75,
+     "hit": 132.8,
+     "ty": 515.0,
+     "ev": 305.9,
+     "roi": 132.65
+    },
+    "850": {
+     "n": 62,
+     "hit": 104.7,
+     "ty": 498.0,
+     "ev": 330.8,
+     "roi": 139.57
+    },
+    "900": {
+     "n": 47,
+     "hit": 78.5,
+     "ty": 542.0,
+     "ev": 413.4,
+     "roi": 151.59
+    },
+    "950": {
+     "n": 34,
+     "hit": 51.9,
+     "ty": 424.0,
+     "ev": 335.5,
+     "roi": 155.56
+    },
+    "1000": {
+     "n": 27,
+     "hit": 9.6,
+     "ty": 426.0,
+     "ev": 399.8,
+     "roi": 183.52
+    }
+   },
+   "reach": {
+    "n": 1198,
+    "net": 206.2,
+    "g": 508.4,
+    "roi": 113.52,
+    "ignite": 38.4,
+    "lose": 57.8,
+    "one": -175.1,
+    "cap": 21.5
+   }
+  }
+ ]
 }</script>
 <script>
 const DATA = JSON.parse(document.getElementById('DATA').textContent);
@@ -2755,10 +3587,10 @@ function render() {
   // ① ②
   const sk = $('sink').value, my = $('my').value, gv = $('gateV');
   const gateOK = sk ? (sk === 's1' || sk === 's2') : null;
-  const dead = my === 'm0' || my === 'm9';                         // ① がループにほぼ入らない区間 → 以下すべて無効
+  const pre = my.startsWith('p'), dead = pre || my === 'm9';        // ① が 1200 未満(到達狙い)または上限 → 以下すべて無効
   $('sink').disabled = dead; ['nw', 'last', 'half', 'seq', 's1', 's2'].forEach(id => { $(id).disabled = dead || !gateOK; });
   if (!my) { gv.className = 'status na'; gv.textContent = '①を選んでください'; }
-  else if (my === 'm0') { gv.className = 'status wait'; gv.textContent = '未点火: MY が 1200(できれば 1250)に届くまでループは無い。②以下は使わない'; }
+  else if (pre) { const P = DATA.pre.find(x => x.code === my); gv.className = 'status wait'; gv.textContent = `未点火(MY ${P.label}): 1200 到達狙い。最下点 −500 以下の台のみ、②以下は使わない`; }
   else if (my === 'm9') { gv.className = 'status stop'; gv.textContent = '上限到達: ヤメ(この後は通常に戻る)。②以下は使わない'; }
   else if (!sk) { gv.className = 'status na'; gv.textContent = '②を選んでください'; }
   else if (!gateOK) { gv.className = 'status stop'; gv.textContent = '門の外: 沈みが浅い台にループはない(MY に関係なく次3連以上は約30%)。③以下は使わない'; }
@@ -2769,16 +3601,18 @@ function render() {
   // 結果
   const code = stateCode(), v = $('stateV'), s = ST[code + '|hon'], sa = ST[code + '|all'];
   const last = $('last').value;
-  if (dead || !gateOK) { v.className = 'status ' + (dead && my === 'm0' ? 'wait' : 'stop'); v.textContent = dead ? (my === 'm0' ? '未点火(ループ前)' : '上限到達: ヤメ') : (sk ? '門の外: ループとしては打たない' : '①②を選んでください'); $('kpi').innerHTML = ''; $('stateSub').textContent = ''; markState(''); }
+  if (pre) { renderPre(my, v); }
+  else if (dead || !gateOK) { v.className = 'status stop'; v.textContent = dead ? '上限到達: ヤメ' : (sk ? '門の外: ループとしては打たない' : '①②を選んでください'); $('kpi').innerHTML = ''; $('stateSub').textContent = ''; markState(''); }
   else if (code === 'CUT') { v.className = 'status stop'; v.textContent = '切断(上位・ED): 有利区間が切れた。ヤメ'; $('kpi').innerHTML = ''; $('stateSub').textContent = ''; markState(''); }
   else { renderState(code, v, s, sa, nw, last, my, sk); }
   renderSets(dead || !gateOK);
+  if (pre) { const P = DATA.pre.find(x => x.code === my); pre_title = `期待値表(着席G別、MY ${P.label} でハマっている台に座る・1回の当たりまで)`; kmRender(P.km, `最下点 −500 以下でまだ 1200 に届いていない台(本形式9日、n=${P.n_km.toLocaleString()})。1回の当たりまでの値で、点火後の続行分は含まない。`); }
+  else { pre_title = '期待値表(着席G別、MY 1200〜1900 でハマっている台に座る)'; kmRender(DATA.km.band_all.rows, '門を通った MY 1200〜1900 の台に何Gハマった時点で座るか(KM、1回の当たりまで、繋ぎ8G込み、本形式9日)。'); }
   document.querySelectorAll('#entryBox td[data-key]').forEach(td => td.classList.toggle('cur', td.dataset.key === sk + '|' + (my === 'mx' ? 'm1' : my)));
 }
 function renderState(code, v, s, sa, nw, last, my, sk) {
   if (false) { v.className = 'status stop'; v.textContent = '門の外: ループとしては打たない'; }
   else if (nw >= 2) { v.className = 'status stop'; v.textContent = `外れ ${nw >= 3 ? '3 回以上' : '2 回'}: ヤメ(他に打てる席があれば移る)`; }
-  else if (last === 'W' && my === 'm0') { v.className = 'status stop'; v.textContent = '外れで戻し幅が 1200 を割った: ヤメ'; }
   else if (nw === 1 && last === 'W') { v.className = 'status wait'; v.textContent = '外れ 1 回目: 戻し幅が帯に残っていれば続行(次も外れならヤメ)'; }
   else { v.className = 'status go'; v.textContent = code === 'E0' ? '点火直後: 当たるまで打つ(途中の見切りは損)' : '続行'; }
   if (!s || !s.S2) { $('kpi').innerHTML = `<div><span class="v">n=${s ? s.n : 0}</span><span class="k">該当が少なく数値なし</span></div>`; $('stateSub').textContent = ''; }
@@ -2804,6 +3638,21 @@ function renderSets(off) {
   else if (b === 'b') out('wait', `3連か4連の境目(4セット目へ ${c3[1].rate}%)`, '');
   else out('go', `3連型: 4セット目へ ${c3[2].rate}%`, '3連で終われば型どおり');
 }
+function renderPre(code, v) {
+  const P = DATA.pre.find(x => x.code === code), r = P.reach;
+  v.className = 'status wait'; v.textContent = `MY ${P.label}: 1回打って点火(1200 到達)したら採用案で続行、届かなければヤメ`;
+  $('kpi').innerHTML = [[yen(r.net), `平均純増(${fmt(r.net)}枚)`, cls(r.net)], [`${r.roi.toFixed(1)}%`, `ROI(投資 ${Math.round(r.g)}G)`, rcls(r.roi)], [`${r.ignite.toFixed(0)}%`, '1回で点火する率', r.ignite >= 30 ? 'pos' : r.ignite < 10 ? 'neg' : '']]
+    .map(([a, b, c]) => `<div class="${c}"><span class="v">${a}</span><span class="k">${b}</span></div>`).join('');
+  $('stateSub').textContent = `負けで終わる ${r.lose}% | 点火しなかった場合の1回の純増 ${r.one == null ? '—' : yen(r.one)} | 本形式 n=${r.n}(最下点 −500 以下・まだ 1200 に届いていない台)`;
+  markState('');
+}
+function kmRender(rows, cap) {
+  let k = '<table><thead><tr><th>着席G</th><th>サンプル数</th><th>初当り</th><th>RUSH_TY</th><th>期待値(円)</th><th>ROI%</th></tr></thead><tbody>';
+  Object.keys(rows).map(Number).sort((x, y) => x - y).forEach(gk => { const r = rows[gk]; k += `<tr><td style="background:var(--gcol);font-weight:bold">${gk}G</td><td>${r.n.toLocaleString()}</td><td>1/${r.hit}</td><td>${r.ty}</td><td class="${cls(r.ev)}">${yen(r.ev)}</td><td class="${rcls(r.roi)}">${r.roi.toFixed(1)}</td></tr>`; });
+  $('kmBox').innerHTML = k + `</tbody></table><p class="sub">${cap}</p>`;
+  $('kmTitle').textContent = pre_title;
+}
+let pre_title = '';
 function markState(code) { document.querySelectorAll('#stateTable tr').forEach(tr => tr.classList.toggle('cur', tr.dataset.code === code)); }
 
 // ---------- 表
@@ -2813,10 +3662,6 @@ function markState(code) { document.querySelectorAll('#stateTable tr').forEach(t
     h += `<tr><td class="lab">${sb.label}</td>` + DATA.my_bands.map(mb => { const e = E[sb.code + '|' + mb.code + '|hon']; if (!e || !e.S2) return `<td>n=${e ? e.n : 0}</td>`; const r = e.S2; return `<td class="${cls(r.net)}" data-key="${sb.code}|${mb.code}">${yen(r.net)}<br><span class="${rcls(r.roi)}" style="font-size:10.5px">${r.roi.toFixed(0)}%</span></td>`; }).join('') + '</tr>';
   });
   $('entryBox').innerHTML = h + '</tbody></table><p class="sub">採用案で打った場合の平均純増と ROI(本形式9日)。門の外(沈み幅 −500 より浅い)は戻し幅が高くてもマイナス。</p>';
-  const rows = DATA.km.band_all.rows;
-  let k = '<table><thead><tr><th>着席G</th><th>サンプル数</th><th>初当り</th><th>RUSH_TY</th><th>期待値(円)</th><th>ROI%</th></tr></thead><tbody>';
-  Object.keys(rows).map(Number).sort((x, y) => x - y).forEach(gk => { const r = rows[gk]; k += `<tr><td style="background:var(--gcol);font-weight:bold">${gk}G</td><td>${r.n.toLocaleString()}</td><td>1/${r.hit}</td><td>${r.ty}</td><td class="${cls(r.ev)}">${yen(r.ev)}</td><td class="${rcls(r.roi)}">${r.roi.toFixed(1)}</td></tr>`; });
-  $('kmBox').innerHTML = k + '</tbody></table><p class="sub">門を通った戻し帯の台に何Gハマった時点で座るか(KM、1回の当たりまで、繋ぎ8G込み、本形式9日)。</p>';
   let t = '<table><thead><tr><th>状態</th><th>n</th><th>次3連+</th><th>期待値(円)</th><th>ROI%</th></tr></thead><tbody>';
   DATA.state_order.forEach(code => { const s = ST[code + '|hon']; const c = s && s.S2 ? `<td>${s.n}</td><td>${s.S2.next3.toFixed(0)}%</td><td class="${cls(s.S2.net)}">${yen(s.S2.net)}</td><td class="${rcls(s.S2.roi)}">${s.S2.roi.toFixed(1)}</td>` : `<td>${s ? s.n : 0}</td><td colspan="3">n不足</td>`; t += `<tr data-code="${code}"><td class="lab">${s.name}</td>${c}</tr>`; });
   $('stateTable').innerHTML = t + '</tbody></table><p class="sub">本形式9日、採用案で続けた場合の先の期待値。</p>';
