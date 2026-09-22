@@ -16,6 +16,7 @@
   .card{border:1px solid var(--border);border-radius:5px;padding:12px;background:#fff;margin-bottom:8px}
   .layer{border:1px solid var(--border);border-radius:4px;padding:8px 10px;background:var(--panel);margin-bottom:8px}
   .layer .h{font-size:11.5px;color:var(--sub);font-weight:bold;margin-bottom:4px}
+  select:disabled{color:var(--muted);background:#f4f4f4}
   select{width:100%;padding:8px 8px;border:1px solid var(--border);border-radius:4px;font-size:15px;font-family:inherit;background:#fff}
   .status{border-left:5px solid var(--border);padding:6px 10px;margin:8px 0 0;font-size:14px;font-weight:bold;background:#f6f6f6;border-radius:0 4px 4px 0}
   .status.go{border-color:var(--plus);background:var(--ok)} .status.stop{border-color:var(--minus);background:var(--ng)} .status.wait{border-color:#C79A00;background:var(--mid)} .status.na{color:#777}
@@ -43,11 +44,11 @@
 
 <h2>1. 台の状態</h2>
 <div class="card">
-  <div class="layer"><div class="h">① MY</div>
+  <div class="layer"><div class="h">① 最下点(MYの起点)の有利区間差枚数</div>
+    <select id="sink"><option value="">選んでください</option><option value="s1">−1000 以下</option><option value="s2">−1000〜−500</option><option value="s3">−500 以上</option></select></div>
+  <div class="layer"><div class="h">② MY</div>
     <select id="my"><option value="">選んでください</option><option value="p0">600 未満</option><option value="p1">600〜800</option><option value="p2">800〜1000</option><option value="p3">1000〜1100</option><option value="p4">1100〜1200</option><option value="mx">1200〜1250</option><option value="m1">1250〜1400</option><option value="m2">1400〜1600</option><option value="m3">1600〜1900</option><option value="m9">1900 以上</option></select></div>
-  <div class="layer"><div class="h">② 最下点(MYの起点)の有利区間差枚数</div>
-    <select id="sink"><option value="">選んでください</option><option value="s1">−1000 以下</option><option value="s2">−1000〜−500</option><option value="s3">−500〜0</option><option value="s4">0 以上</option></select></div>
-  <div class="status na" id="gateV">①②を選んでください</div>
+  <div class="status na" id="gateV">①を選んでください</div>
 </div>
 
 <h2>2. 期待値</h2>
@@ -13546,7 +13547,7 @@ const cls = v => v == null ? '' : (v >= 0 ? 'pos' : 'neg');
 const rcls = r => r == null ? '' : (r >= 100 ? 'pos' : 'neg');
 $('meta').textContent = `本形式${M.n_honkei_days}日(${M.honkei_days[0].slice(5)}〜${M.honkei_days[M.honkei_days.length-1].slice(5)}) | 円 = 20倍 | ${M.built}`;
 const GR = {}; DATA.grid.forEach(e => { GR[e.my + '|' + e.sink] = e; });
-const MYL = Object.fromEntries(DATA.grid_my.map(b => [b.code, b])); const SKL = Object.fromEntries(DATA.sink_bands.map(b => [b.code, b.label]));
+const MYL = Object.fromEntries(DATA.grid_my.map(b => [b.code, b])); const SKL = { s1: '−1000 以下', s2: '−1000〜−500', s3: '−500 以上' };
 const RULE_S2 = '打ち方: 当たるまで打つ。当たりの後、MY が 1200〜1900 なら続行。外れ(単発・1セット目 220 未満の 2連)で MY が 1200 を割ったらヤメ、外れが通算 2 回でヤメ、MY 1900 到達・切断(上位・ED)でヤメ。6連以上の後は天国 1 本を取る。';
 const RULE_B = '打ち方: 当たるまで打つ。MY が 1200 に届いたら上の続行ルールへ。届かなくても MY が 1000 以上なら再び打つ。1000 を割ったらヤメ。';
 ['my', 'sink'].forEach(id => $(id).addEventListener('change', render));
@@ -13558,8 +13559,11 @@ function kmTable(rows, pre) {
 }
 function render() {
   const my = $('my').value, sk = $('sink').value, gv = $('gateV');
+  $('my').disabled = sk === 's3';
+  if (sk === 's3') { gv.className = 'status stop'; gv.textContent = '最下点 −500 以上: ループは立ち上がらない(通常の台と同じ)。MY に関係なく対象外'; clear_(); return; }
+  if (!sk) { gv.className = 'status na'; gv.textContent = '①を選んでください'; clear_(); return; }
   if (my === 'm9') { gv.className = 'status stop'; gv.textContent = 'MY 1900 以上: 上限到達。ヤメ(この後は通常の台に戻る)'; clear_(); return; }
-  if (!my || !sk) { gv.className = 'status na'; gv.textContent = '①②を選んでください'; clear_(); return; }
+  if (!my) { gv.className = 'status na'; gv.textContent = '②を選んでください'; clear_(); return; }
   const e = GR[my + '|' + sk], pre = MYL[my].pol === 'B', gateOK = sk === 's1' || sk === 's2';
   if (!e || !e.rows) { gv.className = 'status na'; gv.textContent = `該当が少なく数値なし(本形式 n=${e ? e.n : 0})`; clear_(); return; }
   const r0 = e.rows[0] || e.rows['0'];
