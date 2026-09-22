@@ -45,11 +45,9 @@
 <h2>1. 台の状態</h2>
 <div class="card">
   <div class="layer"><div class="h">① 最下点(MYの起点)の有利区間差枚数</div>
-    <select id="sink"><option value="s12" selected>−500 以下</option><option value="s3">−500 以上</option></select></div>
+    <select id="sink"><option value="s12" selected>−500枚 未満</option><option value="s3">−500枚 以上</option></select></div>
   <div class="layer"><div class="h">② MY</div>
-    <select id="my"><option value="p0" selected>600 未満</option><option value="p1">600〜800</option><option value="p2">800〜1000</option><option value="p3">1000〜1100</option><option value="p4">1100〜1200</option><option value="mx">1200〜1250</option><option value="m1">1250〜1400</option><option value="m2">1400〜1600</option><option value="m3">1600〜1900</option><option value="m9">1900 以上</option></select></div>
-  <div class="layer"><div class="h">③ ループ回数(MY が 1200 に届いた後に引いた当たりの回数)</div>
-    <select id="k"><option value="all">指定なし(全体)</option><option value="0">0 回(点火直後)</option><option value="1">1 回</option><option value="2">2 回</option><option value="3">3 回</option><option value="4">4 回以上</option></select></div>
+    <select id="my"><option value="p0" selected>600枚 未満</option><option value="p1">600〜800枚</option><option value="p2">800〜1000枚</option><option value="p3">1000〜1100枚</option><option value="p4">1100〜1200枚</option><option value="mx">1200〜1250枚</option><option value="m1">1250〜1400枚</option><option value="m2">1400〜1600枚</option><option value="m3">1600〜1900枚</option><option value="m9">1900枚 以上</option></select></div>
   <div class="status na" id="gateV">①を選んでください</div>
 </div>
 
@@ -14771,10 +14769,10 @@ const cls = v => v == null ? '' : (v >= 0 ? 'pos' : 'neg');
 const rcls = r => r == null ? '' : (r >= 100 ? 'pos' : 'neg');
 $('meta').textContent = `本形式${M.n_honkei_days}日(${M.honkei_days[0].slice(5)}〜${M.honkei_days[M.honkei_days.length-1].slice(5)}) | 円 = 20倍 | ${M.built}`;
 const GR = {}; DATA.grid.forEach(e => { GR[e.my + '|' + e.sink + '|' + e.k] = e; });
-const MYL = Object.fromEntries(DATA.grid_my.map(b => [b.code, b])); const SKL = { s12: '−500 以下', s3: '−500 以上' };
+const MYL = Object.fromEntries(DATA.grid_my.map(b => [b.code, b])); const SKL = { s12: '−500枚 未満', s3: '−500枚 以上' };
 const RULE_S2 = '打ち方: 当たるまで打つ。当たりの後、MY が 1200〜1900 なら続行。外れ(単発・1セット目 220 未満の 2連)で MY が 1200 を割ったらヤメ、外れが通算 2 回でヤメ、MY 1900 到達・切断(上位・ED)でヤメ。6連以上の後は天国 1 本を取る。';
 const RULE_B = '打ち方: 当たるまで打つ。MY が 1200 に届いたら上の続行ルールへ。届かなくても MY が 1000 以上なら再び打つ。1000 を割ったらヤメ。';
-['my', 'sink', 'k'].forEach(id => $(id).addEventListener('change', render));
+['my', 'sink'].forEach(id => $(id).addEventListener('change', render));
 function clear_() { $('kpi').innerHTML = ''; $('kpiSub').textContent = ''; $('ruleLine').textContent = ''; $('ruleLine').style.display = 'none'; $('kmBox').innerHTML = ''; }
 function kmTable(rows, pre) {
   let k = `<table><thead><tr><th>着席G</th><th>サンプル数</th><th>初当り</th><th>${pre ? '点火率' : 'RUSH_TY'}</th><th>期待値(円)</th><th>ROI%</th></tr></thead><tbody>`;
@@ -14784,12 +14782,11 @@ function kmTable(rows, pre) {
 function render() {
   const my = $('my').value, sk = $('sink').value, gv = $('gateV');
   const pre0 = my && MYL[my] && MYL[my].pol === 'B';
-  $('k').disabled = !my || pre0 || my === 'm9'; if ($('k').disabled) $('k').value = 'all';
-  const kk = $('k').value;
-  $('my').disabled = sk === 's3'; if (sk === 's3') { $('k').disabled = true; $('k').value = 'all'; }
+  const kk = 'all';
+  $('my').disabled = sk === 's3';
   if (sk === 's3') {   // 門の外: MY を問わず 1200〜1900 全体の表(弱さの確認用)
     const e = GR['mall|s3|all'], r0 = e.rows[0] || e.rows['0'];
-    gv.className = 'status stop'; gv.textContent = '最下点 −500 以上: ループは立ち上がらない(通常の台と同じ)。MY に関係なく対象外';
+    gv.className = 'status stop'; gv.textContent = '最下点 −500枚 以上: ループは立ち上がらない(通常の台と同じ)。MY に関係なく対象外';
     $('kpi').innerHTML = [[yen(r0.ev), `0G 着席の期待値(${fmt(r0.ev)}枚)`, cls(r0.ev)], [`${r0.roi.toFixed(1)}%`, `ROI(投資 ${Math.round(r0.g)}G)`, rcls(r0.roi)], [`${e.next3.toFixed(0)}%`, '次が3連以上', 'neg']].map(([a, b, c]) => `<div class="${c}"><span class="v">${a}</span><span class="k">${b}</span></div>`).join('');
     $('kpiSub').textContent = `MY 1200〜1900 の席をまとめた値(本形式9日 n=${r0.n.toLocaleString()})。ループ狙いの打ち方で最後まで打っても、この水準。`;
     $('ruleLine').style.display = ''; $('ruleLine').textContent = '弱さの確認用: ' + RULE_S2;
@@ -14797,21 +14794,21 @@ function render() {
     return;
   }
   const e = GR[my + '|' + sk + '|' + kk], pre = MYL[my].pol === 'B', gateOK = sk === 's12';
-  if (!e || !e.rows) { gv.className = 'status na'; gv.textContent = `この組み合わせは該当が少なく表なし(本形式 n=${e ? e.n : 0})。③を「指定なし」にすると全体の表`; clear_(); return; }
+  if (!e || !e.rows) { gv.className = 'status na'; gv.textContent = `該当が少なく表なし(本形式 n=${e ? e.n : 0})`; clear_(); return; }
   const r0 = e.rows[0] || e.rows['0'];
   if (!gateOK) { gv.className = 'status stop'; gv.textContent = `最下点 ${SKL[sk]}: ループは立ち上がらない(通常の台と同じ)`; }
-  else if (pre) { gv.className = 'status wait'; gv.textContent = `MY ${MYL[my].label}: 未点火。1200 到達狙い`; }
+  else if (pre) { gv.className = 'status wait'; gv.textContent = `MY ${$('my').selectedOptions[0].textContent}: 未点火。1200 到達狙い`; }
   else if (my === 'm9') { gv.className = 'status stop'; gv.textContent = 'MY 1900 以上: 上限到達。ヤメ(この後は通常の台に戻る)。下は続けた場合の参考'; }
   else if (my === 'mx') { gv.className = 'status wait'; gv.textContent = 'MY 1200〜1250: 誤差で未達が混ざる帯'; }
-  else { gv.className = 'status go'; gv.textContent = `MY ${MYL[my].label}・最下点 ${SKL[sk]}${kk === 'all' ? '' : '・ループ ' + (kk === '4' ? '4 回以上' : kk + ' 回')}: ループ狙い`; }
+  else { gv.className = 'status go'; gv.textContent = `MY ${$('my').selectedOptions[0].textContent}・最下点 ${SKL[sk]}: ループ狙い`; }
   const third = pre ? [`${r0.ignite == null ? '—' : r0.ignite.toFixed(0) + '%'}`, '1200 に届く率', r0.ignite >= 30 ? 'pos' : r0.ignite < 10 ? 'neg' : ''] : [`${e.next3 == null ? '—' : e.next3.toFixed(0) + '%'}`, '次が3連以上', e.next3 >= 60 ? 'pos' : e.next3 < 45 ? 'neg' : ''];
   $('kpi').innerHTML = [[yen(r0.ev), `0G 着席の期待値(${fmt(r0.ev)}枚)`, cls(r0.ev)], [`${r0.roi.toFixed(1)}%`, `ROI(投資 ${Math.round(r0.g)}G)`, rcls(r0.roi)], third].map(([a, b, c]) => `<div class="${c}"><span class="v">${a}</span><span class="k">${b}</span></div>`).join('');
-  $('kpiSub').textContent = `本形式9日 n=${r0.n.toLocaleString()}${kk === 'all' ? '' : '(ループ ' + (kk === '4' ? '4 回以上' : kk + ' 回') + ' の席)'}。最適と思われる打ち方で最後まで打った場合の純増(繋ぎ 8G 込み)。`;
+  $('kpiSub').textContent = `本形式9日 n=${r0.n.toLocaleString()}。最適と思われる打ち方で最後まで打った場合の純増(繋ぎ 8G 込み)。`;
   $('ruleLine').style.display = ''; $('ruleLine').textContent = (my === 'm9' ? '参考(採用案では 1900 到達でヤメ)。続けた場合: ' : '') + (pre ? RULE_B + ' ' + RULE_S2 : RULE_S2);
   $('kmBox').innerHTML = kmTable(e.rows, pre) + `<p class="sub">着席G = その時点から打ち始めた場合(それまでの消化分は含まない)。初当り${pre ? '' : '・RUSH_TY'}は 1 回目の当たりの KM 値${pre ? '、点火率 = その席から 1200 に届く率' : ''}。</p>`;
 }
 $('terms').innerHTML = `<b>MY</b>: 底(最下点)から現在までの当日差枚の上げ幅。1200 で点火、1900 でヤメ(真の上限は 2000、推定は 50 枚ほど低く出る)。<br>
-<b>最下点(MY の起点)の有利区間差枚数</b>: 基準点(朝イチ 0、または当日の切断時点の差枚)から見た底の位置。−500 より深いときだけループがある(−500 以上の表は弱さの確認用)。<br><b>ループ回数</b>: MY が 1200 に届いた後に引いた当たりの回数(届いた塊は数えない)。指定なし = 回数を問わない全体。<br>
+<b>最下点(MY の起点)の有利区間差枚数</b>: 基準点(朝イチ 0、または当日の切断時点の差枚)から見た底の位置。−500枚 より深いときだけループがある(−500枚 以上の表は弱さの確認用)。<br>
 <b>外れ</b>: 単発、1セット目 220 未満の 2連、4連型(1・2 セット目 140 未満)なのに 3連止まり。<br>
 <b>${RULE_S2}</b><br><b>MY 1200 未満: ${RULE_B}</b><br><br>
 数値は本形式9日(${M.honkei_days.join('、')})の実戦データで、同じデータで発見して評価した値(in-sample)。差枚は推定値(通常時 ${M.jungen}枚/G、AT 純増 3.0)。記録不良のセッションは除外。`;
