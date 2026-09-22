@@ -1,0 +1,2828 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>戦コレツール</title>
+<style>
+  :root{--gold:#8B2E2E;--head:#F2C9C9;--gcol:#FBE3E3;--rowb:#FBF1F1;--border:#B09090;--text:#333;--sub:#6E2020;--plus:#1F5FBF;--minus:#C0392B;--panel:#FFF3F3;--bg:#fff;--muted:#8A8A8A;--ok:#DDF2E3;--ng:#FBDDDD;--mid:#FFF0B3}
+  *{box-sizing:border-box}
+  body{color-scheme:light;margin:0;background:var(--bg);color:var(--text);font-family:"Yu Gothic UI","Yu Gothic","Hiragino Sans","Meiryo",system-ui,sans-serif;font-size:14px;line-height:1.55}
+  .wrap{max-width:720px;margin:0 auto;padding:0 14px 60px}
+  h1{background:var(--gold);color:#fff;font-size:18px;margin:0 -14px 0;padding:14px;text-align:center}
+  .meta{background:var(--panel);border:1px solid var(--border);border-top:none;padding:6px;text-align:center;font-size:11.5px;color:var(--sub);margin:0 -14px 14px}
+  h2{font-size:15px;color:var(--sub);border-left:5px solid var(--gold);padding-left:9px;margin:20px 0 8px}
+  .card{border:1px solid var(--border);border-radius:5px;padding:12px;background:#fff;margin-bottom:8px}
+  .layer{border:1px solid var(--border);border-radius:4px;padding:8px 10px;background:var(--panel);margin-bottom:8px}
+  .layer .h{font-size:11.5px;color:var(--sub);font-weight:bold;margin-bottom:4px}
+  select{width:100%;padding:8px 8px;border:1px solid var(--border);border-radius:4px;font-size:15px;font-family:inherit;background:#fff}
+  select:disabled{color:var(--muted);background:#f4f4f4}
+  .layer .sub{font-size:11px;color:var(--muted);margin-top:3px}
+  .status{border-left:5px solid var(--border);padding:6px 10px;margin:8px 0 0;font-size:14px;font-weight:bold;background:#f6f6f6;border-radius:0 4px 4px 0}
+  .status.go{border-color:var(--plus);background:var(--ok)} .status.stop{border-color:var(--minus);background:var(--ng)} .status.wait{border-color:#C79A00;background:var(--mid)} .status.na{color:#777}
+  .kpi{display:flex;gap:8px;margin:8px 0 4px} .kpi div{flex:1;border:1px solid var(--border);border-radius:4px;padding:8px 4px;text-align:center;background:var(--panel)}
+  .kpi .v{display:block;font-size:21px;font-weight:bold;line-height:1.25;color:var(--sub)} .kpi .k{font-size:11px;color:var(--sub)} .kpi div.pos{background:var(--ok)} .kpi div.pos .v{color:var(--plus)} .kpi div.neg{background:var(--ng)} .kpi div.neg .v{color:var(--minus)}
+  .sub{font-size:12px;color:var(--muted);margin:4px 0 0}
+  .rule{font-size:12px;color:var(--sub);background:var(--panel);border:1px solid var(--border);border-radius:4px;padding:7px 9px;margin:8px 0 0}
+  .note{font-size:12px;color:#555;line-height:1.55;margin:6px 0 0}
+  table{border-collapse:collapse;width:100%;font-size:13px} th{background:var(--head);color:#5A2020;border:1px solid var(--border);padding:5px 4px;font-size:12px;white-space:nowrap}
+  td{border:1px solid var(--border);padding:5px 4px;text-align:center} tbody tr:nth-child(even){background:var(--rowb)} td.lab{background:var(--gcol);font-weight:bold;text-align:left}
+  td.pos{background:var(--ok);color:var(--plus);font-weight:bold} td.neg{background:var(--ng);color:var(--minus);font-weight:bold} tr.cur td{outline:2px solid #C79A00;outline-offset:-2px;font-weight:bold}
+  details{margin:8px 0} summary{cursor:pointer;color:var(--sub);font-size:13.5px;font-weight:bold;padding:4px 0}
+  @media (max-width:640px){
+    .wrap{padding:0 8px 40px} h1{font-size:16px;padding:11px 8px;margin:0 -8px} .meta{margin:0 -8px 10px;font-size:10.5px;padding:5px}
+    h2{font-size:14px;margin:16px 0 6px} .card{padding:9px} .layer{padding:7px 8px} .layer .sub{display:none}
+    .status{font-size:13px} .kpi .v{font-size:19px} .kpi .k{font-size:10.5px} .note{display:none} .rule{font-size:11.5px}
+    table{font-size:11.5px} th,td{padding:4px 2px} th{font-size:10.5px} td.lab{font-size:11px}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>戦コレツール</h1>
+<div class="meta" id="meta"></div>
+
+<h2>1. 台の状態</h2>
+<div class="card">
+  <div class="layer"><div class="h">① MY</div>
+    <select id="my"><option value="">選んでください</option><option value="m0">1200 未満(未点火)</option><option value="mx">1200〜1250(誤差帯)</option><option value="m1">1250〜1400</option><option value="m2">1400〜1600</option><option value="m3">1600〜1900</option><option value="m9">1900 以上(上限)</option></select>
+    <div class="sub">底 = 基準点(朝イチ 0、または当日の切断時点)以降の当日差枚の最安値。1200 で点火、1900 でヤメ。</div></div>
+  <div class="layer"><div class="h">② 最下点(MYの起点)の有利区間差枚数</div>
+    <select id="sink"><option value="">選んでください</option><option value="s1">−1000 以下</option><option value="s2">−1000〜−500</option><option value="s3">−500〜0</option><option value="s4">0 以上(沈みなし)</option></select>
+    <div class="sub">−500 より深いときだけループがある。</div></div>
+  <div class="status na" id="gateV">①②を選んでください</div>
+</div>
+
+<h2>2. 点火後の履歴</h2>
+<div class="card">
+  <div class="layer"><div class="h">③ 外れの回数(点火後の通算)</div>
+    <select id="nw"><option value="-1">まだ当たりなし(点火直後)</option><option value="0">0 回</option><option value="1">1 回</option><option value="2">2 回</option><option value="3">3 回以上</option></select>
+    <div class="sub">外れ = 単発、1セット目 220 未満の 2連、4連型(1・2セット目 140 未満)なのに 3連止まり。</div></div>
+  <div class="layer"><div class="h">④ 直前の当たり</div>
+    <select id="last"><option value="S">型どおり(2連 頭≥260・3連・4連)</option><option value="W">外れ</option><option value="H">半外れ(2連 頭220〜260・5連以上)</option><option value="C">切断(上位・ED)</option></select></div>
+  <div class="layer"><div class="h">⑤ 半外れ(2連 頭220〜260・5連以上)の有無</div>
+    <select id="half"><option value="0">なし</option><option value="1">あり</option></select></div>
+  <div class="layer"><div class="h">⑥ 外れ 2 回の並び(③が 2 回のとき)</div>
+    <select id="seq"><option value="C">連続</option><option value="F">飛び石(間に型どおりを挟む)</option></select></div>
+</div>
+
+<h2>3. 結果</h2>
+<div class="card">
+  <div class="status na" id="stateV"></div>
+  <div class="kpi" id="kpi"></div>
+  <p class="sub" id="stateSub"></p>
+  <div class="rule" id="ruleLine"></div>
+</div>
+
+<h2>4. 当たり中(何連まで来るか)</h2>
+<div class="card">
+  <div class="layer"><div class="h">⑦ 1セット目の獲得</div>
+    <select id="s1"><option value="">選んでください</option><option value="a">140 未満</option><option value="b">140〜220</option><option value="c">220〜260</option><option value="d">260 以上</option></select></div>
+  <div class="layer"><div class="h">⑧ 2セット目の獲得(⑦が 140 未満のとき)</div>
+    <select id="s2"><option value="">まだ</option><option value="a">140 未満</option><option value="b">140〜160</option><option value="c">160 以上</option></select></div>
+  <div class="status na" id="setV">⑦を選んでください</div>
+  <p class="sub" id="setNote"></p>
+</div>
+
+<details><summary>入口の成績(初めて 1200 に届いた直後に座る)</summary><div class="card" id="entryBox"></div></details>
+<details open><summary>期待値表(着席G別、MY 1200〜1900 でハマっている台に座る)</summary><div class="card" id="kmBox"></div></details>
+<details><summary>状態の一覧(本形式9日)</summary><div class="card" id="stateTable"></div></details>
+<details><summary>用語・採用案・注意</summary><div class="card note" style="display:block" id="terms"></div></details>
+</div>
+
+<script type="application/json" id="DATA">{
+ "meta": {
+  "built": "2026-09-22",
+  "machine": "L戦国コレクション6",
+  "honkei_days": [
+   "2026-07-06",
+   "2026-07-07",
+   "2026-07-08",
+   "2026-07-09",
+   "2026-07-10",
+   "2026-07-11",
+   "2026-07-12",
+   "2026-07-31",
+   "2026-08-01"
+  ],
+  "n_honkei_days": 9,
+  "coin_mochi": 33.7,
+  "jungen": 1.4837,
+  "tail_g": 8.0,
+  "cap": 1900.0,
+  "gate": -500.0,
+  "pure": -1000.0,
+  "yen_per_coin": 20,
+  "terms": {
+   "基準点": "朝イチ 0、または当日の切断(上位・ED)時点の差枚",
+   "底": "基準点以降の当日差枚の最安値",
+   "沈み幅": "底 − 基準点(門は −500 以下)",
+   "戻し幅": "現在差枚 − 底(1200 で点火、1900 で終了)",
+   "払い方": "1・2セット目の獲得で決まる連数(2連型 / 3連型 / 4連型)",
+   "外れ": "単発、1セット目 220 未満の 2連、4連型なのに 3連止まり",
+   "半外れ": "1セット目 220〜260 の 2連、5連以上",
+   "外れ回数": "点火後の外れの通算"
+  },
+  "rules": {
+   "S2": "外れかつ戻し幅 1200 未満でヤメ、外れ通算 2 回でヤメ、戻し幅 1900 到達・切断でヤメ、6連以上の後は天国1本を取る",
+   "P5": "外れかつ戻し幅 1200 未満でヤメ、戻し幅 1900 到達・切断でヤメ(外れ回数は見ない)"
+  }
+ },
+ "sink_bands": [
+  {
+   "code": "s1",
+   "label": "−1000 以下",
+   "lo": -99999,
+   "hi": -1000
+  },
+  {
+   "code": "s2",
+   "label": "−1000〜−500",
+   "lo": -1000,
+   "hi": -500
+  },
+  {
+   "code": "s3",
+   "label": "−500〜0",
+   "lo": -500,
+   "hi": 0
+  },
+  {
+   "code": "s4",
+   "label": "0 以上(沈みなし)",
+   "lo": 0,
+   "hi": 99999
+  }
+ ],
+ "my_bands": [
+  {
+   "code": "m1",
+   "label": "1250〜1400",
+   "lo": 1250,
+   "hi": 1400
+  },
+  {
+   "code": "m2",
+   "label": "1400〜1600",
+   "lo": 1400,
+   "hi": 1600
+  },
+  {
+   "code": "m3",
+   "label": "1600〜1900",
+   "lo": 1600,
+   "hi": 1900
+  },
+  {
+   "code": "mall",
+   "label": "1250〜1900 全体",
+   "lo": 1250,
+   "hi": 1900
+  }
+ ],
+ "entry": [
+  {
+   "sink": "s1",
+   "my": "m1",
+   "pop": "hon",
+   "n": 698,
+   "first3": 66.6,
+   "S2": {
+    "n": 698,
+    "net": 625.4,
+    "g": 586.6,
+    "roi": 135.54,
+    "lose": 23.5,
+    "lose500": 8.0,
+    "reach": 53.2,
+    "cut": 5.9,
+    "cyc": 2.44,
+    "p5": -678.0,
+    "med": 658.0,
+    "per_g": 1.066,
+    "one": 243.3,
+    "next3": 66.6
+   },
+   "P5": {
+    "n": 698,
+    "net": 635.2,
+    "g": 603.8,
+    "roi": 135.06,
+    "lose": 23.1,
+    "lose500": 8.2,
+    "reach": 54.7,
+    "cut": 5.9,
+    "cyc": 2.51,
+    "p5": -678.0,
+    "med": 673.0,
+    "per_g": 1.052,
+    "one": 243.3,
+    "next3": 66.6
+   }
+  },
+  {
+   "sink": "s1",
+   "my": "m1",
+   "pop": "all",
+   "n": 1229,
+   "first3": 65.3,
+   "S2": {
+    "n": 1229,
+    "net": 520.1,
+    "g": 626.2,
+    "roi": 127.68,
+    "lose": 28.6,
+    "lose500": 11.6,
+    "reach": 47.6,
+    "cut": 5.2,
+    "cyc": 2.42,
+    "p5": -773.0,
+    "med": 629.0,
+    "per_g": 0.831,
+    "one": 202.6,
+    "next3": 65.3
+   },
+   "P5": {
+    "n": 1229,
+    "net": 520.3,
+    "g": 647.5,
+    "roi": 126.78,
+    "lose": 28.9,
+    "lose500": 12.1,
+    "reach": 48.7,
+    "cut": 5.3,
+    "cyc": 2.48,
+    "p5": -832.0,
+    "med": 635.0,
+    "per_g": 0.803,
+    "one": 202.6,
+    "next3": 65.3
+   }
+  },
+  {
+   "sink": "s1",
+   "my": "m2",
+   "pop": "hon",
+   "n": 677,
+   "first3": 69.9,
+   "S2": {
+    "n": 677,
+    "net": 598.6,
+    "g": 545.2,
+    "roi": 136.6,
+    "lose": 16.2,
+    "lose500": 7.5,
+    "reach": 60.9,
+    "cut": 4.7,
+    "cyc": 2.26,
+    "p5": -685.0,
+    "med": 543.0,
+    "per_g": 1.098,
+    "one": 263.0,
+    "next3": 69.9
+   },
+   "P5": {
+    "n": 677,
+    "net": 604.0,
+    "g": 569.7,
+    "roi": 135.34,
+    "lose": 16.4,
+    "lose500": 8.6,
+    "reach": 62.6,
+    "cut": 4.9,
+    "cyc": 2.35,
+    "p5": -719.0,
+    "med": 555.0,
+    "per_g": 1.06,
+    "one": 263.0,
+    "next3": 69.9
+   }
+  },
+  {
+   "sink": "s1",
+   "my": "m2",
+   "pop": "all",
+   "n": 1214,
+   "first3": 66.1,
+   "S2": {
+    "n": 1214,
+    "net": 532.3,
+    "g": 545.6,
+    "roi": 132.52,
+    "lose": 21.1,
+    "lose500": 9.7,
+    "reach": 56.3,
+    "cut": 5.0,
+    "cyc": 2.19,
+    "p5": -761.0,
+    "med": 510.0,
+    "per_g": 0.976,
+    "one": 253.3,
+    "next3": 66.1
+   },
+   "P5": {
+    "n": 1214,
+    "net": 532.8,
+    "g": 587.1,
+    "roi": 130.25,
+    "lose": 21.3,
+    "lose500": 11.9,
+    "reach": 58.2,
+    "cut": 5.4,
+    "cyc": 2.32,
+    "p5": -818.0,
+    "med": 525.0,
+    "per_g": 0.908,
+    "one": 253.3,
+    "next3": 66.1
+   }
+  },
+  {
+   "sink": "s1",
+   "my": "m3",
+   "pop": "hon",
+   "n": 643,
+   "first3": 68.4,
+   "S2": {
+    "n": 643,
+    "net": 499.5,
+    "g": 372.8,
+    "roi": 144.66,
+    "lose": 13.8,
+    "lose500": 6.5,
+    "reach": 76.0,
+    "cut": 5.3,
+    "cyc": 1.62,
+    "p5": -599.0,
+    "med": 345.0,
+    "per_g": 1.34,
+    "one": 297.2,
+    "next3": 68.4
+   },
+   "P5": {
+    "n": 643,
+    "net": 510.1,
+    "g": 393.4,
+    "roi": 143.22,
+    "lose": 12.4,
+    "lose500": 7.9,
+    "reach": 77.6,
+    "cut": 5.3,
+    "cyc": 1.69,
+    "p5": -732.0,
+    "med": 356.0,
+    "per_g": 1.297,
+    "one": 297.2,
+    "next3": 68.4
+   }
+  },
+  {
+   "sink": "s1",
+   "my": "m3",
+   "pop": "all",
+   "n": 1133,
+   "first3": 65.5,
+   "S2": {
+    "n": 1133,
+    "net": 395.9,
+    "g": 416.7,
+    "roi": 131.67,
+    "lose": 17.9,
+    "lose500": 9.3,
+    "reach": 71.1,
+    "cut": 5.3,
+    "cyc": 1.66,
+    "p5": -777.0,
+    "med": 320.0,
+    "per_g": 0.95,
+    "one": 258.5,
+    "next3": 65.5
+   },
+   "P5": {
+    "n": 1133,
+    "net": 394.4,
+    "g": 443.4,
+    "roi": 129.65,
+    "lose": 16.9,
+    "lose500": 11.2,
+    "reach": 72.5,
+    "cut": 5.3,
+    "cyc": 1.74,
+    "p5": -866.0,
+    "med": 324.0,
+    "per_g": 0.89,
+    "one": 258.5,
+    "next3": 65.5
+   }
+  },
+  {
+   "sink": "s1",
+   "my": "mall",
+   "pop": "hon",
+   "n": 2018,
+   "first3": 68.3,
+   "S2": {
+    "n": 2018,
+    "net": 576.3,
+    "g": 504.6,
+    "roi": 138.07,
+    "lose": 18.0,
+    "lose500": 7.4,
+    "reach": 63.0,
+    "cut": 5.3,
+    "cyc": 2.12,
+    "p5": -676.0,
+    "med": 523.0,
+    "per_g": 1.142,
+    "one": 267.1,
+    "next3": 68.3
+   },
+   "P5": {
+    "n": 2018,
+    "net": 584.9,
+    "g": 525.3,
+    "roi": 137.11,
+    "lose": 17.4,
+    "lose500": 8.2,
+    "reach": 64.7,
+    "cut": 5.4,
+    "cyc": 2.19,
+    "p5": -715.0,
+    "med": 533.0,
+    "per_g": 1.113,
+    "one": 267.1,
+    "next3": 68.3
+   }
+  },
+  {
+   "sink": "s1",
+   "my": "mall",
+   "pop": "all",
+   "n": 3576,
+   "first3": 65.6,
+   "S2": {
+    "n": 3576,
+    "net": 484.9,
+    "g": 532.5,
+    "roi": 130.35,
+    "lose": 22.7,
+    "lose500": 10.2,
+    "reach": 58.0,
+    "cut": 5.2,
+    "cyc": 2.1,
+    "p5": -771.0,
+    "med": 465.0,
+    "per_g": 0.911,
+    "one": 237.5,
+    "next3": 65.6
+   },
+   "P5": {
+    "n": 3576,
+    "net": 484.6,
+    "g": 562.3,
+    "roi": 128.73,
+    "lose": 22.5,
+    "lose500": 11.8,
+    "reach": 59.5,
+    "cut": 5.3,
+    "cyc": 2.19,
+    "p5": -837.0,
+    "med": 481.0,
+    "per_g": 0.862,
+    "one": 237.5,
+    "next3": 65.6
+   }
+  },
+  {
+   "sink": "s2",
+   "my": "m1",
+   "pop": "hon",
+   "n": 293,
+   "first3": 66.2,
+   "S2": {
+    "n": 293,
+    "net": 677.9,
+    "g": 688.7,
+    "roi": 132.81,
+    "lose": 25.9,
+    "lose500": 10.9,
+    "reach": 52.6,
+    "cut": 13.7,
+    "cyc": 2.62,
+    "p5": -829.0,
+    "med": 676.0,
+    "per_g": 0.984,
+    "one": 275.5,
+    "next3": 66.2
+   },
+   "P5": {
+    "n": 293,
+    "net": 688.0,
+    "g": 705.5,
+    "roi": 132.5,
+    "lose": 26.6,
+    "lose500": 11.3,
+    "reach": 53.2,
+    "cut": 14.7,
+    "cyc": 2.69,
+    "p5": -829.0,
+    "med": 689.0,
+    "per_g": 0.975,
+    "one": 275.5,
+    "next3": 66.2
+   }
+  },
+  {
+   "sink": "s2",
+   "my": "m1",
+   "pop": "all",
+   "n": 533,
+   "first3": 67.5,
+   "S2": {
+    "n": 533,
+    "net": 609.8,
+    "g": 698.2,
+    "roi": 129.11,
+    "lose": 26.8,
+    "lose500": 11.6,
+    "reach": 54.4,
+    "cut": 11.3,
+    "cyc": 2.63,
+    "p5": -877.0,
+    "med": 670.0,
+    "per_g": 0.873,
+    "one": 239.1,
+    "next3": 67.5
+   },
+   "P5": {
+    "n": 533,
+    "net": 622.2,
+    "g": 716.5,
+    "roi": 128.95,
+    "lose": 27.4,
+    "lose500": 12.0,
+    "reach": 55.0,
+    "cut": 12.0,
+    "cyc": 2.7,
+    "p5": -914.0,
+    "med": 678.0,
+    "per_g": 0.868,
+    "one": 239.1,
+    "next3": 67.5
+   }
+  },
+  {
+   "sink": "s2",
+   "my": "m2",
+   "pop": "hon",
+   "n": 257,
+   "first3": 61.5,
+   "S2": {
+    "n": 257,
+    "net": 514.3,
+    "g": 619.7,
+    "roi": 127.66,
+    "lose": 25.7,
+    "lose500": 12.8,
+    "reach": 57.2,
+    "cut": 10.9,
+    "cyc": 2.36,
+    "p5": -943.0,
+    "med": 507.0,
+    "per_g": 0.83,
+    "one": 218.7,
+    "next3": 61.5
+   },
+   "P5": {
+    "n": 257,
+    "net": 492.7,
+    "g": 671.7,
+    "roi": 124.45,
+    "lose": 27.2,
+    "lose500": 16.7,
+    "reach": 59.5,
+    "cut": 11.3,
+    "cyc": 2.52,
+    "p5": -1026.0,
+    "med": 518.0,
+    "per_g": 0.733,
+    "one": 218.7,
+    "next3": 61.5
+   }
+  },
+  {
+   "sink": "s2",
+   "my": "m2",
+   "pop": "all",
+   "n": 477,
+   "first3": 62.7,
+   "S2": {
+    "n": 477,
+    "net": 549.0,
+    "g": 615.9,
+    "roi": 129.71,
+    "lose": 26.4,
+    "lose500": 14.3,
+    "reach": 54.5,
+    "cut": 13.0,
+    "cyc": 2.3,
+    "p5": -969.0,
+    "med": 501.0,
+    "per_g": 0.891,
+    "one": 285.4,
+    "next3": 62.7
+   },
+   "P5": {
+    "n": 477,
+    "net": 545.7,
+    "g": 667.8,
+    "roi": 127.24,
+    "lose": 26.6,
+    "lose500": 18.0,
+    "reach": 56.4,
+    "cut": 14.0,
+    "cyc": 2.45,
+    "p5": -1024.0,
+    "med": 516.0,
+    "per_g": 0.817,
+    "one": 285.4,
+    "next3": 62.7
+   }
+  },
+  {
+   "sink": "s2",
+   "my": "m3",
+   "pop": "hon",
+   "n": 170,
+   "first3": 55.9,
+   "S2": {
+    "n": 170,
+    "net": 307.1,
+    "g": 552.9,
+    "roi": 118.52,
+    "lose": 27.6,
+    "lose500": 16.5,
+    "reach": 60.0,
+    "cut": 8.2,
+    "cyc": 1.86,
+    "p5": -1069.0,
+    "med": 260.0,
+    "per_g": 0.556,
+    "one": 168.6,
+    "next3": 55.9
+   },
+   "P5": {
+    "n": 170,
+    "net": 297.7,
+    "g": 617.5,
+    "roi": 116.07,
+    "lose": 25.3,
+    "lose500": 20.6,
+    "reach": 63.5,
+    "cut": 8.2,
+    "cyc": 2.05,
+    "p5": -1139.0,
+    "med": 283.0,
+    "per_g": 0.482,
+    "one": 168.6,
+    "next3": 55.9
+   }
+  },
+  {
+   "sink": "s2",
+   "my": "m3",
+   "pop": "all",
+   "n": 331,
+   "first3": 52.0,
+   "S2": {
+    "n": 331,
+    "net": 275.9,
+    "g": 540.9,
+    "roi": 117.0,
+    "lose": 27.8,
+    "lose500": 15.7,
+    "reach": 59.8,
+    "cut": 8.8,
+    "cyc": 1.85,
+    "p5": -1008.0,
+    "med": 314.0,
+    "per_g": 0.51,
+    "one": 167.5,
+    "next3": 52.0
+   },
+   "P5": {
+    "n": 331,
+    "net": 273.4,
+    "g": 615.8,
+    "roi": 114.8,
+    "lose": 25.1,
+    "lose500": 19.6,
+    "reach": 63.7,
+    "cut": 8.8,
+    "cyc": 2.05,
+    "p5": -1109.0,
+    "med": 327.0,
+    "per_g": 0.444,
+    "one": 167.5,
+    "next3": 52.0
+   }
+  },
+  {
+   "sink": "s2",
+   "my": "mall",
+   "pop": "hon",
+   "n": 720,
+   "first3": 62.1,
+   "S2": {
+    "n": 720,
+    "net": 531.9,
+    "g": 632.0,
+    "roi": 128.06,
+    "lose": 26.2,
+    "lose500": 12.9,
+    "reach": 56.0,
+    "cut": 11.4,
+    "cyc": 2.35,
+    "p5": -969.0,
+    "med": 525.0,
+    "per_g": 0.842,
+    "one": 230.0,
+    "next3": 62.1
+   },
+   "P5": {
+    "n": 720,
+    "net": 526.1,
+    "g": 672.7,
+    "roi": 126.07,
+    "lose": 26.5,
+    "lose500": 15.4,
+    "reach": 57.9,
+    "cut": 11.9,
+    "cyc": 2.48,
+    "p5": -1020.0,
+    "med": 545.0,
+    "per_g": 0.782,
+    "one": 230.0,
+    "next3": 62.1
+   }
+  },
+  {
+   "sink": "s2",
+   "my": "mall",
+   "pop": "all",
+   "n": 1341,
+   "first3": 62.0,
+   "S2": {
+    "n": 1341,
+    "net": 505.7,
+    "g": 630.1,
+    "roi": 126.75,
+    "lose": 26.9,
+    "lose500": 13.6,
+    "reach": 55.8,
+    "cut": 11.3,
+    "cyc": 2.32,
+    "p5": -969.0,
+    "med": 518.0,
+    "per_g": 0.803,
+    "one": 237.9,
+    "next3": 62.0
+   },
+   "P5": {
+    "n": 1341,
+    "net": 508.9,
+    "g": 674.3,
+    "roi": 125.16,
+    "lose": 26.5,
+    "lose500": 16.0,
+    "reach": 57.6,
+    "cut": 11.9,
+    "cyc": 2.45,
+    "p5": -1012.0,
+    "med": 533.0,
+    "per_g": 0.755,
+    "one": 237.9,
+    "next3": 62.0
+   }
+  },
+  {
+   "sink": "s3",
+   "my": "m1",
+   "pop": "hon",
+   "n": 189,
+   "first3": 25.4,
+   "S2": {
+    "n": 189,
+    "net": 3.7,
+    "g": 664.9,
+    "roi": 100.19,
+    "lose": 64.6,
+    "lose500": 32.3,
+    "reach": 11.6,
+    "cut": 11.6,
+    "cyc": 1.95,
+    "p5": -1186.0,
+    "med": -218.0,
+    "per_g": 0.006,
+    "one": -65.4,
+    "next3": 25.4
+   },
+   "P5": {
+    "n": 189,
+    "net": -22.8,
+    "g": 719.8,
+    "roi": 98.94,
+    "lose": 70.4,
+    "lose500": 34.9,
+    "reach": 13.8,
+    "cut": 11.6,
+    "cyc": 2.1,
+    "p5": -1186.0,
+    "med": -314.0,
+    "per_g": -0.032,
+    "one": -65.4,
+    "next3": 25.4
+   }
+  },
+  {
+   "sink": "s3",
+   "my": "m1",
+   "pop": "all",
+   "n": 358,
+   "first3": 27.9,
+   "S2": {
+    "n": 358,
+    "net": 9.3,
+    "g": 631.1,
+    "roi": 100.49,
+    "lose": 64.8,
+    "lose500": 30.7,
+    "reach": 16.8,
+    "cut": 9.2,
+    "cyc": 1.85,
+    "p5": -1175.0,
+    "med": -214.0,
+    "per_g": 0.015,
+    "one": 1.8,
+    "next3": 27.9
+   },
+   "P5": {
+    "n": 358,
+    "net": -17.5,
+    "g": 693.0,
+    "roi": 99.16,
+    "lose": 68.7,
+    "lose500": 33.5,
+    "reach": 19.0,
+    "cut": 9.2,
+    "cyc": 2.01,
+    "p5": -1195.0,
+    "med": -299.0,
+    "per_g": -0.025,
+    "one": 1.8,
+    "next3": 27.9
+   }
+  },
+  {
+   "sink": "s3",
+   "my": "m2",
+   "pop": "hon",
+   "n": 139,
+   "first3": 32.4,
+   "S2": {
+    "n": 139,
+    "net": -189.7,
+    "g": 770.7,
+    "roi": 91.8,
+    "lose": 70.5,
+    "lose500": 46.0,
+    "reach": 12.2,
+    "cut": 12.9,
+    "cyc": 1.91,
+    "p5": -1410.0,
+    "med": -454.0,
+    "per_g": -0.246,
+    "one": -143.6,
+    "next3": 32.4
+   },
+   "P5": {
+    "n": 139,
+    "net": -235.6,
+    "g": 858.4,
+    "roi": 90.85,
+    "lose": 71.2,
+    "lose500": 54.0,
+    "reach": 14.4,
+    "cut": 13.7,
+    "cyc": 2.12,
+    "p5": -1423.0,
+    "med": -556.0,
+    "per_g": -0.274,
+    "one": -143.6,
+    "next3": 32.4
+   }
+  },
+  {
+   "sink": "s3",
+   "my": "m2",
+   "pop": "all",
+   "n": 253,
+   "first3": 37.5,
+   "S2": {
+    "n": 253,
+    "net": -150.9,
+    "g": 745.2,
+    "roi": 93.25,
+    "lose": 65.2,
+    "lose500": 42.7,
+    "reach": 18.2,
+    "cut": 11.1,
+    "cyc": 1.9,
+    "p5": -1298.0,
+    "med": -346.0,
+    "per_g": -0.202,
+    "one": -126.3,
+    "next3": 37.5
+   },
+   "P5": {
+    "n": 253,
+    "net": -168.7,
+    "g": 855.5,
+    "roi": 93.43,
+    "lose": 64.4,
+    "lose500": 48.2,
+    "reach": 20.9,
+    "cut": 13.0,
+    "cyc": 2.17,
+    "p5": -1414.0,
+    "med": -475.0,
+    "per_g": -0.197,
+    "one": -126.3,
+    "next3": 37.5
+   }
+  },
+  {
+   "sink": "s3",
+   "my": "m3",
+   "pop": "hon",
+   "n": 121,
+   "first3": 30.6,
+   "S2": {
+    "n": 121,
+    "net": -149.8,
+    "g": 685.6,
+    "roi": 92.72,
+    "lose": 57.9,
+    "lose500": 37.2,
+    "reach": 26.4,
+    "cut": 9.1,
+    "cyc": 1.83,
+    "p5": -1259.0,
+    "med": -235.0,
+    "per_g": -0.219,
+    "one": -79.2,
+    "next3": 30.6
+   },
+   "P5": {
+    "n": 121,
+    "net": -121.0,
+    "g": 809.2,
+    "roi": 95.02,
+    "lose": 53.7,
+    "lose500": 46.3,
+    "reach": 30.6,
+    "cut": 13.2,
+    "cyc": 2.22,
+    "p5": -1263.0,
+    "med": -411.0,
+    "per_g": -0.15,
+    "one": -79.2,
+    "next3": 30.6
+   }
+  },
+  {
+   "sink": "s3",
+   "my": "m3",
+   "pop": "all",
+   "n": 202,
+   "first3": 28.7,
+   "S2": {
+    "n": 202,
+    "net": -82.2,
+    "g": 644.9,
+    "roi": 95.75,
+    "lose": 53.5,
+    "lose500": 34.2,
+    "reach": 34.7,
+    "cut": 7.4,
+    "cyc": 1.79,
+    "p5": -1220.0,
+    "med": -135.0,
+    "per_g": -0.127,
+    "one": -57.4,
+    "next3": 28.7
+   },
+   "P5": {
+    "n": 202,
+    "net": -68.9,
+    "g": 748.9,
+    "roi": 96.93,
+    "lose": 49.5,
+    "lose500": 43.1,
+    "reach": 39.1,
+    "cut": 9.9,
+    "cyc": 2.11,
+    "p5": -1238.0,
+    "med": 22.0,
+    "per_g": -0.092,
+    "one": -57.4,
+    "next3": 28.7
+   }
+  },
+  {
+   "sink": "s3",
+   "my": "mall",
+   "pop": "hon",
+   "n": 449,
+   "first3": 29.0,
+   "S2": {
+    "n": 449,
+    "net": -97.5,
+    "g": 703.2,
+    "roi": 95.38,
+    "lose": 64.6,
+    "lose500": 37.9,
+    "reach": 15.8,
+    "cut": 11.4,
+    "cyc": 1.9,
+    "p5": -1277.0,
+    "med": -310.0,
+    "per_g": -0.139,
+    "one": -93.3,
+    "next3": 29.0
+   },
+   "P5": {
+    "n": 449,
+    "net": -115.1,
+    "g": 786.8,
+    "roi": 95.12,
+    "lose": 66.1,
+    "lose500": 43.9,
+    "reach": 18.5,
+    "cut": 12.7,
+    "cyc": 2.14,
+    "p5": -1285.0,
+    "med": -421.0,
+    "per_g": -0.146,
+    "one": -93.3,
+    "next3": 29.0
+   }
+  },
+  {
+   "sink": "s3",
+   "my": "mall",
+   "pop": "all",
+   "n": 813,
+   "first3": 31.1,
+   "S2": {
+    "n": 813,
+    "net": -63.3,
+    "g": 670.0,
+    "roi": 96.85,
+    "lose": 62.1,
+    "lose500": 35.3,
+    "reach": 21.6,
+    "cut": 9.3,
+    "cyc": 1.85,
+    "p5": -1233.0,
+    "med": -248.0,
+    "per_g": -0.094,
+    "one": -52.8,
+    "next3": 31.1
+   },
+   "P5": {
+    "n": 813,
+    "net": -77.3,
+    "g": 757.5,
+    "roi": 96.6,
+    "lose": 62.6,
+    "lose500": 40.5,
+    "reach": 24.6,
+    "cut": 10.6,
+    "cyc": 2.09,
+    "p5": -1260.0,
+    "med": -342.0,
+    "per_g": -0.102,
+    "one": -52.8,
+    "next3": 31.1
+   }
+  },
+  {
+   "sink": "s4",
+   "my": "m1",
+   "pop": "hon",
+   "n": 54,
+   "first3": 29.6,
+   "S2": {
+    "n": 54,
+    "net": 62.9,
+    "g": 569.7,
+    "roi": 103.68,
+    "lose": 68.5,
+    "lose500": 24.1,
+    "reach": 13.0,
+    "cut": 9.3,
+    "cyc": 1.67,
+    "p5": -1007.0,
+    "med": -268.0,
+    "per_g": 0.11,
+    "one": -50.5,
+    "next3": 29.6
+   },
+   "P5": {
+    "n": 54,
+    "net": -10.9,
+    "g": 648.8,
+    "roi": 99.44,
+    "lose": 75.9,
+    "lose500": 31.5,
+    "reach": 13.0,
+    "cut": 9.3,
+    "cyc": 1.81,
+    "p5": -1129.0,
+    "med": -360.0,
+    "per_g": -0.017,
+    "one": -50.5,
+    "next3": 29.6
+   }
+  },
+  {
+   "sink": "s4",
+   "my": "m1",
+   "pop": "all",
+   "n": 86,
+   "first3": 32.6,
+   "S2": {
+    "n": 86,
+    "net": 76.8,
+    "g": 571.8,
+    "roi": 104.48,
+    "lose": 62.8,
+    "lose500": 26.7,
+    "reach": 19.8,
+    "cut": 8.1,
+    "cyc": 1.73,
+    "p5": -1173.0,
+    "med": -225.0,
+    "per_g": 0.134,
+    "one": -52.7,
+    "next3": 32.6
+   },
+   "P5": {
+    "n": 86,
+    "net": 26.0,
+    "g": 642.4,
+    "roi": 101.35,
+    "lose": 67.4,
+    "lose500": 32.6,
+    "reach": 20.9,
+    "cut": 8.1,
+    "cyc": 1.88,
+    "p5": -1182.0,
+    "med": -301.0,
+    "per_g": 0.041,
+    "one": -52.7,
+    "next3": 32.6
+   }
+  },
+  {
+   "sink": "s4",
+   "my": "m2",
+   "pop": "hon",
+   "n": 36,
+   "first3": 16.7,
+   "S2": {
+    "n": 36,
+    "net": -317.3,
+    "g": 632.8,
+    "roi": 83.29,
+    "lose": 69.4,
+    "lose500": 44.4,
+    "reach": 2.8,
+    "cut": 5.6,
+    "cyc": 1.56,
+    "p5": -1035.0,
+    "med": -439.0,
+    "per_g": -0.501,
+    "one": -232.0,
+    "next3": 16.7
+   },
+   "P5": {
+    "n": 36,
+    "net": -232.6,
+    "g": 701.5,
+    "roi": 88.95,
+    "lose": 66.7,
+    "lose500": 44.4,
+    "reach": 5.6,
+    "cut": 11.1,
+    "cyc": 1.78,
+    "p5": -1035.0,
+    "med": -439.0,
+    "per_g": -0.332,
+    "one": -232.0,
+    "next3": 16.7
+   }
+  },
+  {
+   "sink": "s4",
+   "my": "m2",
+   "pop": "all",
+   "n": 79,
+   "first3": 20.3,
+   "S2": {
+    "n": 79,
+    "net": -71.3,
+    "g": 616.2,
+    "roi": 96.14,
+    "lose": 67.1,
+    "lose500": 39.2,
+    "reach": 12.7,
+    "cut": 6.3,
+    "cyc": 1.62,
+    "p5": -1047.0,
+    "med": -416.0,
+    "per_g": -0.116,
+    "one": -76.6,
+    "next3": 20.3
+   },
+   "P5": {
+    "n": 79,
+    "net": -43.2,
+    "g": 678.4,
+    "roi": 97.88,
+    "lose": 65.8,
+    "lose500": 41.8,
+    "reach": 13.9,
+    "cut": 10.1,
+    "cyc": 1.8,
+    "p5": -1047.0,
+    "med": -429.0,
+    "per_g": -0.064,
+    "one": -76.6,
+    "next3": 20.3
+   }
+  },
+  {
+   "sink": "s4",
+   "my": "m3",
+   "pop": "hon",
+   "n": 34,
+   "first3": 38.2,
+   "S2": {
+    "n": 34,
+    "net": 272.4,
+    "g": 573.7,
+    "roi": 115.83,
+    "lose": 44.1,
+    "lose500": 26.5,
+    "reach": 32.4,
+    "cut": 17.6,
+    "cyc": 1.74,
+    "p5": -1241.0,
+    "med": 160.0,
+    "per_g": 0.475,
+    "one": 321.7,
+    "next3": 38.2
+   },
+   "P5": {
+    "n": 34,
+    "net": 326.2,
+    "g": 627.5,
+    "roi": 117.33,
+    "lose": 41.2,
+    "lose500": 26.5,
+    "reach": 35.3,
+    "cut": 20.6,
+    "cyc": 1.94,
+    "p5": -1241.0,
+    "med": 244.0,
+    "per_g": 0.52,
+    "one": 321.7,
+    "next3": 38.2
+   }
+  },
+  {
+   "sink": "s4",
+   "my": "m3",
+   "pop": "all",
+   "n": 54,
+   "first3": 38.9,
+   "S2": {
+    "n": 54,
+    "net": 119.5,
+    "g": 563.1,
+    "roi": 107.08,
+    "lose": 44.4,
+    "lose500": 31.5,
+    "reach": 35.2,
+    "cut": 14.8,
+    "cyc": 1.65,
+    "p5": -1244.0,
+    "med": 140.0,
+    "per_g": 0.212,
+    "one": 137.0,
+    "next3": 38.9
+   },
+   "P5": {
+    "n": 54,
+    "net": 125.8,
+    "g": 621.8,
+    "roi": 106.75,
+    "lose": 44.4,
+    "lose500": 35.2,
+    "reach": 37.0,
+    "cut": 16.7,
+    "cyc": 1.83,
+    "p5": -1244.0,
+    "med": 202.0,
+    "per_g": 0.202,
+    "one": 137.0,
+    "next3": 38.9
+   }
+  },
+  {
+   "sink": "s4",
+   "my": "mall",
+   "pop": "hon",
+   "n": 124,
+   "first3": 28.2,
+   "S2": {
+    "n": 124,
+    "net": 10.0,
+    "g": 589.1,
+    "roi": 100.56,
+    "lose": 62.1,
+    "lose500": 30.6,
+    "reach": 15.3,
+    "cut": 10.5,
+    "cyc": 1.65,
+    "p5": -1076.0,
+    "med": -268.0,
+    "per_g": 0.017,
+    "one": -1.2,
+    "next3": 28.2
+   },
+   "P5": {
+    "n": 124,
+    "net": 17.2,
+    "g": 658.2,
+    "roi": 100.87,
+    "lose": 63.7,
+    "lose500": 33.9,
+    "reach": 16.9,
+    "cut": 12.9,
+    "cyc": 1.84,
+    "p5": -1170.0,
+    "med": -344.0,
+    "per_g": 0.026,
+    "one": -1.2,
+    "next3": 28.2
+   }
+  },
+  {
+   "sink": "s4",
+   "my": "mall",
+   "pop": "all",
+   "n": 219,
+   "first3": 29.7,
+   "S2": {
+    "n": 219,
+    "net": 33.9,
+    "g": 585.7,
+    "roi": 101.93,
+    "lose": 59.8,
+    "lose500": 32.4,
+    "reach": 21.0,
+    "cut": 9.1,
+    "cyc": 1.67,
+    "p5": -1187.0,
+    "med": -246.0,
+    "per_g": 0.058,
+    "one": -14.6,
+    "next3": 29.7
+   },
+   "P5": {
+    "n": 219,
+    "net": 25.7,
+    "g": 650.3,
+    "roi": 101.32,
+    "lose": 61.2,
+    "lose500": 36.5,
+    "reach": 22.4,
+    "cut": 11.0,
+    "cyc": 1.84,
+    "p5": -1208.0,
+    "med": -321.0,
+    "per_g": 0.039,
+    "one": -14.6,
+    "next3": 29.7
+   }
+  }
+ ],
+ "states": [
+  {
+   "code": "E0",
+   "name": "点火直後(履歴なし)",
+   "desc": "戻し幅が初めて 1200 に届いた塊の直後",
+   "pop": "hon",
+   "n": 2738,
+   "S2": {
+    "n": 2738,
+    "net": 564.6,
+    "g": 538.1,
+    "roi": 134.98,
+    "lose": 20.2,
+    "lose500": 8.8,
+    "reach": 61.2,
+    "cut": 6.9,
+    "cyc": 2.18,
+    "p5": -746.0,
+    "med": 524.0,
+    "per_g": 1.049,
+    "one": 257.4,
+    "next3": 66.7
+   },
+   "P5": {
+    "n": 2738,
+    "net": 569.4,
+    "g": 564.1,
+    "roi": 133.65,
+    "lose": 19.8,
+    "lose500": 10.1,
+    "reach": 62.9,
+    "cut": 7.1,
+    "cyc": 2.27,
+    "p5": -787.0,
+    "med": 537.0,
+    "per_g": 1.009,
+    "one": 257.4,
+    "next3": 66.7
+   }
+  },
+  {
+   "code": "E0",
+   "name": "点火直後(履歴なし)",
+   "desc": "戻し幅が初めて 1200 に届いた塊の直後",
+   "pop": "all",
+   "n": 4917,
+   "S2": {
+    "n": 4917,
+    "net": 490.6,
+    "g": 559.1,
+    "roi": 129.25,
+    "lose": 23.8,
+    "lose500": 11.1,
+    "reach": 57.4,
+    "cut": 6.8,
+    "cyc": 2.16,
+    "p5": -823.0,
+    "med": 477.0,
+    "per_g": 0.877,
+    "one": 237.6,
+    "next3": 64.6
+   },
+   "P5": {
+    "n": 4917,
+    "net": 491.3,
+    "g": 592.9,
+    "roi": 127.62,
+    "lose": 23.6,
+    "lose500": 12.9,
+    "reach": 59.0,
+    "cut": 7.1,
+    "cyc": 2.26,
+    "p5": -889.0,
+    "med": 494.0,
+    "per_g": 0.829,
+    "one": 237.6,
+    "next3": 64.6
+   }
+  },
+  {
+   "code": "A0",
+   "name": "外れなし・半外れなし",
+   "desc": "点火後の当たりがすべて型どおり(型より伸びた当たりを含む)",
+   "pop": "hon",
+   "n": 1549,
+   "S2": {
+    "n": 1549,
+    "net": 506.4,
+    "g": 545.9,
+    "roi": 130.92,
+    "lose": 13.0,
+    "lose500": 6.3,
+    "reach": 73.5,
+    "cut": 4.4,
+    "cyc": 2.06,
+    "p5": -621.0,
+    "med": 459.0,
+    "per_g": 0.928,
+    "one": 223.6,
+    "next3": 81.3
+   },
+   "P5": {
+    "n": 1549,
+    "net": 507.0,
+    "g": 556.2,
+    "roi": 130.38,
+    "lose": 12.4,
+    "lose500": 7.0,
+    "reach": 74.6,
+    "cut": 4.4,
+    "cyc": 2.11,
+    "p5": -683.0,
+    "med": 462.0,
+    "per_g": 0.911,
+    "one": 223.6,
+    "next3": 81.3
+   }
+  },
+  {
+   "code": "A0",
+   "name": "外れなし・半外れなし",
+   "desc": "点火後の当たりがすべて型どおり(型より伸びた当たりを含む)",
+   "pop": "all",
+   "n": 2623,
+   "S2": {
+    "n": 2623,
+    "net": 432.6,
+    "g": 571.4,
+    "roi": 125.24,
+    "lose": 17.0,
+    "lose500": 8.8,
+    "reach": 69.9,
+    "cut": 4.4,
+    "cyc": 2.07,
+    "p5": -770.0,
+    "med": 421.0,
+    "per_g": 0.757,
+    "one": 190.9,
+    "next3": 78.8
+   },
+   "P5": {
+    "n": 2623,
+    "net": 445.8,
+    "g": 585.9,
+    "roi": 125.37,
+    "lose": 16.2,
+    "lose500": 9.7,
+    "reach": 70.7,
+    "cut": 4.8,
+    "cyc": 2.12,
+    "p5": -846.0,
+    "med": 425.0,
+    "per_g": 0.761,
+    "one": 190.9,
+    "next3": 78.8
+   }
+  },
+  {
+   "code": "A0H",
+   "name": "外れなし・半外れあり",
+   "desc": "頭 220〜260 の2連、または 5連以上が出ている",
+   "pop": "hon",
+   "n": 185,
+   "S2": {
+    "n": 185,
+    "net": 387.8,
+    "g": 511.6,
+    "roi": 125.27,
+    "lose": 23.8,
+    "lose500": 12.4,
+    "reach": 57.8,
+    "cut": 6.5,
+    "cyc": 1.83,
+    "p5": -787.0,
+    "med": 342.0,
+    "per_g": 0.758,
+    "one": 158.1,
+    "next3": 70.3
+   },
+   "P5": {
+    "n": 185,
+    "net": 378.3,
+    "g": 546.5,
+    "roi": 123.08,
+    "lose": 23.8,
+    "lose500": 14.1,
+    "reach": 58.9,
+    "cut": 6.5,
+    "cyc": 1.92,
+    "p5": -825.0,
+    "med": 347.0,
+    "per_g": 0.692,
+    "one": 158.1,
+    "next3": 70.3
+   }
+  },
+  {
+   "code": "A0H",
+   "name": "外れなし・半外れあり",
+   "desc": "頭 220〜260 の2連、または 5連以上が出ている",
+   "pop": "all",
+   "n": 313,
+   "S2": {
+    "n": 313,
+    "net": 324.3,
+    "g": 507.1,
+    "roi": 121.32,
+    "lose": 26.2,
+    "lose500": 12.8,
+    "reach": 59.1,
+    "cut": 3.8,
+    "cyc": 1.86,
+    "p5": -854.0,
+    "med": 321.0,
+    "per_g": 0.639,
+    "one": 164.6,
+    "next3": 66.8
+   },
+   "P5": {
+    "n": 313,
+    "net": 310.9,
+    "g": 546.2,
+    "roi": 118.98,
+    "lose": 26.8,
+    "lose500": 14.7,
+    "reach": 59.7,
+    "cut": 3.8,
+    "cyc": 1.98,
+    "p5": -874.0,
+    "med": 321.0,
+    "per_g": 0.569,
+    "one": 164.6,
+    "next3": 66.8
+   }
+  },
+  {
+   "code": "A1S",
+   "name": "外れ1回・直前は型どおり",
+   "desc": "外れが 1 回あるが、直前の当たりは型どおり",
+   "pop": "hon",
+   "n": 289,
+   "S2": {
+    "n": 289,
+    "net": 575.1,
+    "g": 525.8,
+    "roi": 136.46,
+    "lose": 10.7,
+    "lose500": 8.0,
+    "reach": 77.9,
+    "cut": 2.4,
+    "cyc": 2.12,
+    "p5": -686.0,
+    "med": 509.0,
+    "per_g": 1.094,
+    "one": 239.8,
+    "next3": 82.0
+   },
+   "P5": {
+    "n": 289,
+    "net": 574.4,
+    "g": 532.7,
+    "roi": 135.95,
+    "lose": 10.7,
+    "lose500": 8.0,
+    "reach": 77.9,
+    "cut": 2.4,
+    "cyc": 2.14,
+    "p5": -726.0,
+    "med": 509.0,
+    "per_g": 1.078,
+    "one": 239.8,
+    "next3": 82.0
+   }
+  },
+  {
+   "code": "A1S",
+   "name": "外れ1回・直前は型どおり",
+   "desc": "外れが 1 回あるが、直前の当たりは型どおり",
+   "pop": "all",
+   "n": 489,
+   "S2": {
+    "n": 489,
+    "net": 484.4,
+    "g": 518.6,
+    "roi": 131.14,
+    "lose": 16.0,
+    "lose500": 10.4,
+    "reach": 72.0,
+    "cut": 2.7,
+    "cyc": 1.99,
+    "p5": -761.0,
+    "med": 465.0,
+    "per_g": 0.934,
+    "one": 203.6,
+    "next3": 80.2
+   },
+   "P5": {
+    "n": 489,
+    "net": 479.1,
+    "g": 530.7,
+    "roi": 130.09,
+    "lose": 16.6,
+    "lose500": 10.6,
+    "reach": 72.2,
+    "cut": 2.7,
+    "cyc": 2.01,
+    "p5": -789.0,
+    "med": 466.0,
+    "per_g": 0.903,
+    "one": 203.6,
+    "next3": 80.2
+   }
+  },
+  {
+   "code": "A1L",
+   "name": "外れ1回・直前が外れ",
+   "desc": "直前の当たりが外れ(1 回目)",
+   "pop": "hon",
+   "n": 476,
+   "S2": {
+    "n": 476,
+    "net": 393.9,
+    "g": 645.3,
+    "roi": 120.35,
+    "lose": 29.6,
+    "lose500": 16.2,
+    "reach": 56.3,
+    "cut": 3.4,
+    "cyc": 2.28,
+    "p5": -934.0,
+    "med": 449.0,
+    "per_g": 0.611,
+    "one": 64.3,
+    "next3": 59.7
+   },
+   "P5": {
+    "n": 476,
+    "net": 378.4,
+    "g": 688.6,
+    "roi": 118.32,
+    "lose": 30.0,
+    "lose500": 19.7,
+    "reach": 57.8,
+    "cut": 3.8,
+    "cyc": 2.43,
+    "p5": -1024.0,
+    "med": 462.0,
+    "per_g": 0.549,
+    "one": 64.3,
+    "next3": 59.7
+   }
+  },
+  {
+   "code": "A1L",
+   "name": "外れ1回・直前が外れ",
+   "desc": "直前の当たりが外れ(1 回目)",
+   "pop": "all",
+   "n": 960,
+   "S2": {
+    "n": 960,
+    "net": 209.1,
+    "g": 659.5,
+    "roi": 110.57,
+    "lose": 38.9,
+    "lose500": 23.3,
+    "reach": 47.4,
+    "cut": 3.3,
+    "cyc": 2.12,
+    "p5": -1138.0,
+    "med": 307.0,
+    "per_g": 0.317,
+    "one": -3.1,
+    "next3": 54.8
+   },
+   "P5": {
+    "n": 960,
+    "net": 198.3,
+    "g": 708.9,
+    "roi": 109.32,
+    "lose": 39.3,
+    "lose500": 26.9,
+    "reach": 49.0,
+    "cut": 4.0,
+    "cyc": 2.27,
+    "p5": -1181.0,
+    "med": 339.0,
+    "per_g": 0.28,
+    "one": -3.1,
+    "next3": 54.8
+   }
+  },
+  {
+   "code": "A1H",
+   "name": "外れ1回・半外れあり",
+   "desc": "外れ 1 回に半外れが加わっている",
+   "pop": "hon",
+   "n": 96,
+   "S2": {
+    "n": 96,
+    "net": 277.5,
+    "g": 660.1,
+    "roi": 114.01,
+    "lose": 28.1,
+    "lose500": 13.5,
+    "reach": 64.6,
+    "cut": 1.0,
+    "cyc": 2.38,
+    "p5": -860.0,
+    "med": 359.0,
+    "per_g": 0.42,
+    "one": 101.2,
+    "next3": 63.5
+   },
+   "P5": {
+    "n": 96,
+    "net": 249.0,
+    "g": 695.3,
+    "roi": 111.94,
+    "lose": 29.2,
+    "lose500": 17.7,
+    "reach": 64.6,
+    "cut": 1.0,
+    "cyc": 2.45,
+    "p5": -917.0,
+    "med": 359.0,
+    "per_g": 0.358,
+    "one": 101.2,
+    "next3": 63.5
+   }
+  },
+  {
+   "code": "A1H",
+   "name": "外れ1回・半外れあり",
+   "desc": "外れ 1 回に半外れが加わっている",
+   "pop": "all",
+   "n": 149,
+   "S2": {
+    "n": 149,
+    "net": 204.9,
+    "g": 617.9,
+    "roi": 111.05,
+    "lose": 34.2,
+    "lose500": 16.1,
+    "reach": 57.7,
+    "cut": 0.7,
+    "cyc": 2.13,
+    "p5": -927.0,
+    "med": 323.0,
+    "per_g": 0.332,
+    "one": 78.1,
+    "next3": 61.1
+   },
+   "P5": {
+    "n": 149,
+    "net": 163.3,
+    "g": 669.0,
+    "roi": 108.14,
+    "lose": 36.2,
+    "lose500": 20.1,
+    "reach": 57.7,
+    "cut": 0.7,
+    "cyc": 2.25,
+    "p5": -1026.0,
+    "med": 318.0,
+    "per_g": 0.244,
+    "one": 78.1,
+    "next3": 61.1
+   }
+  },
+  {
+   "code": "A2C",
+   "name": "外れ2回・連続",
+   "desc": "外れが 2 回続いた直後",
+   "pop": "hon",
+   "n": 79,
+   "S2": {
+    "n": 79,
+    "net": 137.0,
+    "g": 551.6,
+    "roi": 108.28,
+    "lose": 48.1,
+    "lose500": 21.5,
+    "reach": 41.8,
+    "cut": 1.3,
+    "cyc": 1.92,
+    "p5": -935.0,
+    "med": 73.0,
+    "per_g": 0.248,
+    "one": 60.9,
+    "next3": 44.3
+   },
+   "P5": {
+    "n": 79,
+    "net": 85.4,
+    "g": 667.6,
+    "roi": 104.26,
+    "lose": 48.1,
+    "lose500": 29.1,
+    "reach": 46.8,
+    "cut": 1.3,
+    "cyc": 2.29,
+    "p5": -1080.0,
+    "med": 138.0,
+    "per_g": 0.128,
+    "one": 60.9,
+    "next3": 44.3
+   }
+  },
+  {
+   "code": "A2C",
+   "name": "外れ2回・連続",
+   "desc": "外れが 2 回続いた直後",
+   "pop": "all",
+   "n": 176,
+   "S2": {
+    "n": 176,
+    "net": -81.7,
+    "g": 630.4,
+    "roi": 95.68,
+    "lose": 55.7,
+    "lose500": 33.5,
+    "reach": 31.8,
+    "cut": 1.1,
+    "cyc": 1.88,
+    "p5": -1287.0,
+    "med": -158.0,
+    "per_g": -0.13,
+    "one": -83.3,
+    "next3": 35.8
+   },
+   "P5": {
+    "n": 176,
+    "net": -58.4,
+    "g": 714.9,
+    "roi": 97.28,
+    "lose": 56.2,
+    "lose500": 38.1,
+    "reach": 34.7,
+    "cut": 3.4,
+    "cyc": 2.15,
+    "p5": -1287.0,
+    "med": -331.0,
+    "per_g": -0.082,
+    "one": -83.3,
+    "next3": 35.8
+   }
+  },
+  {
+   "code": "A2F",
+   "name": "外れ2回・飛び石",
+   "desc": "外れ 2 回の間に型どおりが挟まった(直前が外れ)",
+   "pop": "hon",
+   "n": 24,
+   "S2": {
+    "n": 24,
+    "net": -11.6,
+    "g": 669.0,
+    "roi": 99.42,
+    "lose": 58.3,
+    "lose500": 25.0,
+    "reach": 41.7,
+    "cut": 0.0,
+    "cyc": 2.12,
+    "p5": -771.0,
+    "med": -152.0,
+    "per_g": -0.017,
+    "one": 61.3,
+    "next3": 50.0
+   },
+   "P5": {
+    "n": 24,
+    "net": -31.7,
+    "g": 704.5,
+    "roi": 98.5,
+    "lose": 54.2,
+    "lose500": 33.3,
+    "reach": 41.7,
+    "cut": 0.0,
+    "cyc": 2.21,
+    "p5": -771.0,
+    "med": -152.0,
+    "per_g": -0.045,
+    "one": 61.3,
+    "next3": 50.0
+   }
+  },
+  {
+   "code": "A2F",
+   "name": "外れ2回・飛び石",
+   "desc": "外れ 2 回の間に型どおりが挟まった(直前が外れ)",
+   "pop": "all",
+   "n": 44,
+   "S2": {
+    "n": 44,
+    "net": -103.3,
+    "g": 754.7,
+    "roi": 95.44,
+    "lose": 56.8,
+    "lose500": 31.8,
+    "reach": 34.1,
+    "cut": 2.3,
+    "cyc": 2.07,
+    "p5": -1069.0,
+    "med": -152.0,
+    "per_g": -0.137,
+    "one": -68.9,
+    "next3": 47.7
+   },
+   "P5": {
+    "n": 44,
+    "net": -177.9,
+    "g": 839.9,
+    "roi": 92.94,
+    "lose": 59.1,
+    "lose500": 38.6,
+    "reach": 34.1,
+    "cut": 2.3,
+    "cyc": 2.2,
+    "p5": -1083.0,
+    "med": -286.0,
+    "per_g": -0.212,
+    "one": -68.9,
+    "next3": 47.7
+   }
+  },
+  {
+   "code": "A2S",
+   "name": "外れ2回・直前は型どおり",
+   "desc": "外れ 2 回の後に型どおりが来た",
+   "pop": "hon",
+   "n": 56,
+   "S2": {
+    "n": 56,
+    "net": 155.2,
+    "g": 731.6,
+    "roi": 107.07,
+    "lose": 28.6,
+    "lose500": 17.9,
+    "reach": 60.7,
+    "cut": 1.8,
+    "cyc": 2.55,
+    "p5": -838.0,
+    "med": 289.0,
+    "per_g": 0.212,
+    "one": 94.8,
+    "next3": 62.5
+   },
+   "P5": {
+    "n": 56,
+    "net": 47.1,
+    "g": 819.0,
+    "roi": 101.92,
+    "lose": 33.9,
+    "lose500": 30.4,
+    "reach": 60.7,
+    "cut": 1.8,
+    "cyc": 2.73,
+    "p5": -930.0,
+    "med": 228.0,
+    "per_g": 0.058,
+    "one": 94.8,
+    "next3": 62.5
+   }
+  },
+  {
+   "code": "A2S",
+   "name": "外れ2回・直前は型どおり",
+   "desc": "外れ 2 回の後に型どおりが来た",
+   "pop": "all",
+   "n": 97,
+   "S2": {
+    "n": 97,
+    "net": 53.4,
+    "g": 675.3,
+    "roi": 102.63,
+    "lose": 34.0,
+    "lose500": 23.7,
+    "reach": 55.7,
+    "cut": 1.0,
+    "cyc": 2.26,
+    "p5": -969.0,
+    "med": 210.0,
+    "per_g": 0.079,
+    "one": 36.0,
+    "next3": 56.7
+   },
+   "P5": {
+    "n": 97,
+    "net": -22.6,
+    "g": 745.6,
+    "roi": 98.99,
+    "lose": 38.1,
+    "lose500": 32.0,
+    "reach": 55.7,
+    "cut": 1.0,
+    "cyc": 2.41,
+    "p5": -1020.0,
+    "med": 205.0,
+    "per_g": -0.03,
+    "one": 36.0,
+    "next3": 56.7
+   }
+  },
+  {
+   "code": "A3",
+   "name": "外れ3回以上",
+   "desc": "外れの通算が 3 回以上",
+   "pop": "hon",
+   "n": 64,
+   "S2": {
+    "n": 64,
+    "net": -240.6,
+    "g": 518.7,
+    "roi": 84.54,
+    "lose": 71.9,
+    "lose500": 35.9,
+    "reach": 20.3,
+    "cut": 1.6,
+    "cyc": 1.69,
+    "p5": -1084.0,
+    "med": -256.0,
+    "per_g": -0.464,
+    "one": -169.8,
+    "next3": 14.1
+   },
+   "P5": {
+    "n": 64,
+    "net": -273.3,
+    "g": 632.9,
+    "roi": 85.6,
+    "lose": 70.3,
+    "lose500": 48.4,
+    "reach": 28.1,
+    "cut": 1.6,
+    "cyc": 2.05,
+    "p5": -1140.0,
+    "med": -488.0,
+    "per_g": -0.432,
+    "one": -169.8,
+    "next3": 14.1
+   }
+  },
+  {
+   "code": "A3",
+   "name": "外れ3回以上",
+   "desc": "外れの通算が 3 回以上",
+   "pop": "all",
+   "n": 125,
+   "S2": {
+    "n": 125,
+    "net": -228.0,
+    "g": 610.7,
+    "roi": 87.56,
+    "lose": 68.8,
+    "lose500": 44.8,
+    "reach": 18.4,
+    "cut": 4.0,
+    "cyc": 1.7,
+    "p5": -1287.0,
+    "med": -360.0,
+    "per_g": -0.373,
+    "one": -172.0,
+    "next3": 22.4
+   },
+   "P5": {
+    "n": 125,
+    "net": -194.8,
+    "g": 689.2,
+    "roi": 90.58,
+    "lose": 69.6,
+    "lose500": 52.0,
+    "reach": 22.4,
+    "cut": 6.4,
+    "cyc": 1.95,
+    "p5": -1313.0,
+    "med": -557.0,
+    "per_g": -0.283,
+    "one": -172.0,
+    "next3": 22.4
+   }
+  }
+ ],
+ "state_order": [
+  "E0",
+  "A0",
+  "A0H",
+  "A1S",
+  "A1L",
+  "A1H",
+  "A2C",
+  "A2F",
+  "A2S",
+  "A3"
+ ],
+ "sets_rule": {
+  "cont2": [
+   {
+    "band": "220 未満",
+    "rate": 89.6,
+    "n": 4936
+   },
+   {
+    "band": "220〜260",
+    "rate": 66.2,
+    "n": 308
+   },
+   {
+    "band": "260 以上",
+    "rate": 34.2,
+    "n": 855
+   }
+  ],
+  "cont3": [
+   {
+    "band": "140 未満",
+    "rate": 92.3,
+    "n": 1198
+   },
+   {
+    "band": "140〜160",
+    "rate": 39.6,
+    "n": 225
+   },
+   {
+    "band": "160 以上",
+    "rate": 23.9,
+    "n": 1509
+   }
+  ],
+  "cont3_h1big": {
+   "rate": 30.5,
+   "n": 1490
+  },
+  "cont4": {
+   "rate": 14.6,
+   "n": 1106
+  }
+ },
+ "km": {
+  "band_all": {
+   "n": 8654,
+   "rows": {
+    "0": {
+     "n": 8654,
+     "hit": 262.6,
+     "ty": 548.0,
+     "ev": 147.0,
+     "roi": 110.81
+    },
+    "50": {
+     "n": 8031,
+     "hit": 219.4,
+     "ty": 549.0,
+     "ev": 212.0,
+     "roi": 117.22
+    },
+    "100": {
+     "n": 7162,
+     "hit": 192.3,
+     "ty": 548.0,
+     "ev": 250.8,
+     "roi": 121.83
+    },
+    "150": {
+     "n": 5279,
+     "hit": 199.6,
+     "ty": 547.0,
+     "ev": 239.2,
+     "roi": 120.44
+    },
+    "200": {
+     "n": 3636,
+     "hit": 225.1,
+     "ty": 542.0,
+     "ev": 196.3,
+     "roi": 115.81
+    },
+    "250": {
+     "n": 2985,
+     "hit": 216.2,
+     "ty": 540.0,
+     "ev": 207.2,
+     "roi": 117.09
+    },
+    "300": {
+     "n": 2592,
+     "hit": 194.6,
+     "ty": 537.0,
+     "ev": 236.3,
+     "roi": 120.65
+    },
+    "350": {
+     "n": 2151,
+     "hit": 179.7,
+     "ty": 540.0,
+     "ev": 261.1,
+     "roi": 123.68
+    },
+    "400": {
+     "n": 1707,
+     "hit": 169.7,
+     "ty": 536.0,
+     "ev": 272.7,
+     "roi": 125.5
+    },
+    "450": {
+     "n": 1297,
+     "hit": 164.4,
+     "ty": 524.0,
+     "ev": 268.6,
+     "roi": 125.79
+    },
+    "500": {
+     "n": 962,
+     "hit": 163.6,
+     "ty": 498.0,
+     "ev": 243.5,
+     "roi": 124.04
+    },
+    "550": {
+     "n": 682,
+     "hit": 170.4,
+     "ty": 485.0,
+     "ev": 220.5,
+     "roi": 121.61
+    },
+    "600": {
+     "n": 491,
+     "hit": 176.0,
+     "ty": 478.0,
+     "ev": 204.8,
+     "roi": 119.89
+    },
+    "650": {
+     "n": 385,
+     "hit": 169.6,
+     "ty": 453.0,
+     "ev": 189.6,
+     "roi": 119.23
+    },
+    "700": {
+     "n": 303,
+     "hit": 158.5,
+     "ty": 462.0,
+     "ev": 214.6,
+     "roi": 122.33
+    },
+    "750": {
+     "n": 240,
+     "hit": 145.0,
+     "ty": 468.0,
+     "ev": 240.7,
+     "roi": 125.97
+    },
+    "800": {
+     "n": 193,
+     "hit": 124.2,
+     "ty": 472.0,
+     "ev": 275.6,
+     "roi": 131.73
+    },
+    "850": {
+     "n": 157,
+     "hit": 96.0,
+     "ty": 454.0,
+     "ev": 299.8,
+     "roi": 139.14
+    },
+    "900": {
+     "n": 116,
+     "hit": 72.9,
+     "ty": 443.0,
+     "ev": 322.8,
+     "roi": 147.08
+    },
+    "950": {
+     "n": 80,
+     "hit": 44.6,
+     "ty": 409.0,
+     "ev": 331.4,
+     "roi": 158.43
+    },
+    "1000": {
+     "n": 49,
+     "hit": 9.7,
+     "ty": 359.0,
+     "ev": 333.1,
+     "roi": 180.75
+    }
+   }
+  },
+  "band_first": {
+   "n": 2649,
+   "rows": {
+    "0": {
+     "n": 2649,
+     "hit": 230.6,
+     "ty": 539.0,
+     "ev": 185.4,
+     "roi": 114.77
+    },
+    "50": {
+     "n": 2571,
+     "hit": 186.7,
+     "ty": 540.0,
+     "ev": 250.8,
+     "roi": 122.32
+    },
+    "100": {
+     "n": 2279,
+     "hit": 157.5,
+     "ty": 539.0,
+     "ev": 293.7,
+     "roi": 128.36
+    },
+    "150": {
+     "n": 1530,
+     "hit": 173.0,
+     "ty": 545.0,
+     "ev": 276.5,
+     "roi": 125.41
+    },
+    "200": {
+     "n": 938,
+     "hit": 217.6,
+     "ty": 534.0,
+     "ev": 198.9,
+     "roi": 116.43
+    },
+    "250": {
+     "n": 740,
+     "hit": 219.2,
+     "ty": 537.0,
+     "ev": 199.5,
+     "roi": 116.37
+    },
+    "300": {
+     "n": 654,
+     "hit": 195.2,
+     "ty": 537.0,
+     "ev": 235.7,
+     "roi": 120.55
+    },
+    "350": {
+     "n": 537,
+     "hit": 182.6,
+     "ty": 530.0,
+     "ev": 247.4,
+     "roi": 122.46
+    },
+    "400": {
+     "n": 424,
+     "hit": 174.1,
+     "ty": 521.0,
+     "ev": 250.8,
+     "roi": 123.5
+    },
+    "450": {
+     "n": 329,
+     "hit": 167.7,
+     "ty": 520.0,
+     "ev": 259.5,
+     "roi": 124.77
+    },
+    "500": {
+     "n": 243,
+     "hit": 168.0,
+     "ty": 477.0,
+     "ev": 216.3,
+     "roi": 121.51
+    },
+    "550": {
+     "n": 175,
+     "hit": 176.4,
+     "ty": 450.0,
+     "ev": 176.0,
+     "roi": 117.54
+    },
+    "600": {
+     "n": 125,
+     "hit": 183.4,
+     "ty": 427.0,
+     "ev": 142.8,
+     "roi": 114.27
+    },
+    "650": {
+     "n": 104,
+     "hit": 166.7,
+     "ty": 439.0,
+     "ev": 179.5,
+     "roi": 118.64
+    },
+    "700": {
+     "n": 84,
+     "hit": 151.8,
+     "ty": 433.0,
+     "ev": 196.2,
+     "roi": 121.5
+    },
+    "750": {
+     "n": 65,
+     "hit": 141.1,
+     "ty": 434.0,
+     "ev": 212.8,
+     "roi": 124.14
+    },
+    "800": {
+     "n": 50,
+     "hit": 125.9,
+     "ty": 418.0,
+     "ev": 219.7,
+     "roi": 126.79
+    },
+    "850": {
+     "n": 43,
+     "hit": 90.4,
+     "ty": 374.0,
+     "ev": 227.7,
+     "roi": 134.05
+    },
+    "900": {
+     "n": 31,
+     "hit": 64.3,
+     "ty": 381.0,
+     "ev": 274.1,
+     "roi": 145.83
+    },
+    "950": {
+     "n": 18,
+     "hit": 44.3,
+     "ty": 323.0,
+     "ev": 245.2,
+     "roi": 151.13
+    },
+    "1000": {
+     "n": 11,
+     "hit": 8.7,
+     "ty": 306.0,
+     "ev": 280.9,
+     "roi": 178.93
+    }
+   }
+  },
+  "gate_out": {
+   "n": 1552,
+   "rows": {
+    "0": {
+     "n": 1552,
+     "hit": 379.9,
+     "ty": 379.0,
+     "ev": -196.9,
+     "roi": 87.24
+    },
+    "50": {
+     "n": 1459,
+     "hit": 339.6,
+     "ty": 380.0,
+     "ev": -135.6,
+     "roi": 90.47
+    },
+    "100": {
+     "n": 1354,
+     "hit": 311.5,
+     "ty": 379.0,
+     "ev": -95.5,
+     "roi": 92.86
+    },
+    "150": {
+     "n": 1127,
+     "hit": 317.3,
+     "ty": 381.0,
+     "ev": -101.4,
+     "roi": 92.53
+    },
+    "200": {
+     "n": 932,
+     "hit": 324.2,
+     "ty": 388.0,
+     "ev": -105.2,
+     "roi": 92.4
+    },
+    "250": {
+     "n": 827,
+     "hit": 309.9,
+     "ty": 393.0,
+     "ev": -78.6,
+     "roi": 94.17
+    },
+    "300": {
+     "n": 736,
+     "hit": 294.2,
+     "ty": 398.0,
+     "ev": -49.8,
+     "roi": 96.18
+    },
+    "350": {
+     "n": 668,
+     "hit": 270.6,
+     "ty": 401.0,
+     "ev": -12.3,
+     "roi": 99.0
+    },
+    "400": {
+     "n": 575,
+     "hit": 260.8,
+     "ty": 404.0,
+     "ev": 5.6,
+     "roi": 100.46
+    },
+    "450": {
+     "n": 494,
+     "hit": 248.5,
+     "ty": 409.0,
+     "ev": 28.2,
+     "roi": 102.4
+    },
+    "500": {
+     "n": 431,
+     "hit": 232.6,
+     "ty": 402.0,
+     "ev": 45.1,
+     "roi": 104.01
+    },
+    "550": {
+     "n": 369,
+     "hit": 216.8,
+     "ty": 409.0,
+     "ev": 75.7,
+     "roi": 106.99
+    },
+    "600": {
+     "n": 318,
+     "hit": 196.1,
+     "ty": 416.0,
+     "ev": 112.7,
+     "roi": 110.97
+    },
+    "650": {
+     "n": 264,
+     "hit": 181.5,
+     "ty": 427.0,
+     "ev": 146.1,
+     "roi": 114.67
+    },
+    "700": {
+     "n": 229,
+     "hit": 155.7,
+     "ty": 432.0,
+     "ev": 189.1,
+     "roi": 120.49
+    },
+    "750": {
+     "n": 192,
+     "hit": 132.2,
+     "ty": 424.0,
+     "ev": 215.9,
+     "roi": 125.57
+    },
+    "800": {
+     "n": 149,
+     "hit": 113.0,
+     "ty": 430.0,
+     "ev": 250.3,
+     "roi": 131.57
+    },
+    "850": {
+     "n": 115,
+     "hit": 88.6,
+     "ty": 427.0,
+     "ev": 283.3,
+     "roi": 139.54
+    },
+    "900": {
+     "n": 77,
+     "hit": 69.5,
+     "ty": 450.0,
+     "ev": 335.3,
+     "roi": 149.11
+    },
+    "950": {
+     "n": 45,
+     "hit": 52.1,
+     "ty": 405.0,
+     "ev": 316.3,
+     "roi": 153.98
+    },
+    "1000": {
+     "n": 33,
+     "hit": 9.1,
+     "ty": 418.0,
+     "ev": 392.2,
+     "roi": 183.63
+    }
+   }
+  }
+ }
+}</script>
+<script>
+const DATA = JSON.parse(document.getElementById('DATA').textContent);
+const M = DATA.meta; const YEN = M.yen_per_coin;
+const $ = id => document.getElementById(id);
+const fmt = (v, d = 0) => (v == null ? '—' : (v >= 0 ? '+' : '') + v.toFixed(d));
+const yen = v => (v == null ? '—' : (v >= 0 ? '+' : '−') + Math.abs(Math.round(v * YEN)).toLocaleString() + '円');
+const cls = v => v == null ? '' : (v >= 0 ? 'pos' : 'neg');            // 期待値: 符号
+const rcls = r => r == null ? '' : (r >= 100 ? 'pos' : 'neg');         // ROI: 100% 境
+$('meta').textContent = `本形式${M.n_honkei_days}日(${M.honkei_days[0].slice(5)}〜${M.honkei_days[M.honkei_days.length-1].slice(5)})が正・全25日は参考 | 円 = 20倍 | ${M.built}`;
+const ST = {}; DATA.states.forEach(s => { ST[s.code + '|' + s.pop] = s; });
+const E = {}; DATA.entry.forEach(e => { E[e.sink + '|' + e.my + '|' + e.pop] = e; });
+$('ruleLine').textContent = '採用案: ' + M.rules.S2;
+['sink', 'my', 'nw', 'last', 'half', 'seq', 's1', 's2'].forEach(id => $(id).addEventListener('change', render));
+
+function stateCode() {
+  const nw = parseInt($('nw').value), last = $('last').value, half = $('half').value === '1', seq = $('seq').value;
+  if (last === 'C') return 'CUT';
+  if (nw < 0) return 'E0';
+  if (nw === 0) return (half || last === 'H') ? 'A0H' : 'A0';
+  if (nw === 1) return (half || last === 'H') ? 'A1H' : (last === 'W' ? 'A1L' : 'A1S');
+  if (nw === 2) return last === 'W' ? (seq === 'C' ? 'A2C' : 'A2F') : 'A2S';
+  return 'A3';
+}
+function render() {
+  // ① ②
+  const sk = $('sink').value, my = $('my').value, gv = $('gateV');
+  const gateOK = sk ? (sk === 's1' || sk === 's2') : null;
+  const dead = my === 'm0' || my === 'm9';                         // ① がループにほぼ入らない区間 → 以下すべて無効
+  $('sink').disabled = dead; ['nw', 'last', 'half', 'seq', 's1', 's2'].forEach(id => { $(id).disabled = dead || !gateOK; });
+  if (!my) { gv.className = 'status na'; gv.textContent = '①を選んでください'; }
+  else if (my === 'm0') { gv.className = 'status wait'; gv.textContent = '未点火: MY が 1200(できれば 1250)に届くまでループは無い。②以下は使わない'; }
+  else if (my === 'm9') { gv.className = 'status stop'; gv.textContent = '上限到達: ヤメ(この後は通常に戻る)。②以下は使わない'; }
+  else if (!sk) { gv.className = 'status na'; gv.textContent = '②を選んでください'; }
+  else if (!gateOK) { gv.className = 'status stop'; gv.textContent = '門の外: 沈みが浅い台にループはない(MY に関係なく次3連以上は約30%)。③以下は使わない'; }
+  else if (my === 'mx') { gv.className = 'status wait'; gv.textContent = '1200〜1250: 誤差で未達が混ざる帯(突入は約半分)。1250 を超えてから点火扱い'; }
+  else { gv.className = 'status go'; gv.textContent = `戻し帯の中: 点火${sk === 's2' ? '(沈み幅 −500〜−1000 は境界寄り)' : ''}`; }
+  // ③〜⑥ の活性
+  const nw = parseInt($('nw').value); if (!dead && gateOK) { $('seq').disabled = nw !== 2; $('last').disabled = nw < 0; $('half').disabled = nw < 0; }
+  // 結果
+  const code = stateCode(), v = $('stateV'), s = ST[code + '|hon'], sa = ST[code + '|all'];
+  const last = $('last').value;
+  if (dead || !gateOK) { v.className = 'status ' + (dead && my === 'm0' ? 'wait' : 'stop'); v.textContent = dead ? (my === 'm0' ? '未点火(ループ前)' : '上限到達: ヤメ') : (sk ? '門の外: ループとしては打たない' : '①②を選んでください'); $('kpi').innerHTML = ''; $('stateSub').textContent = ''; markState(''); }
+  else if (code === 'CUT') { v.className = 'status stop'; v.textContent = '切断(上位・ED): 有利区間が切れた。ヤメ'; $('kpi').innerHTML = ''; $('stateSub').textContent = ''; markState(''); }
+  else { renderState(code, v, s, sa, nw, last, my, sk); }
+  renderSets(dead || !gateOK);
+  document.querySelectorAll('#entryBox td[data-key]').forEach(td => td.classList.toggle('cur', td.dataset.key === sk + '|' + (my === 'mx' ? 'm1' : my)));
+}
+function renderState(code, v, s, sa, nw, last, my, sk) {
+  if (false) { v.className = 'status stop'; v.textContent = '門の外: ループとしては打たない'; }
+  else if (nw >= 2) { v.className = 'status stop'; v.textContent = `外れ ${nw >= 3 ? '3 回以上' : '2 回'}: ヤメ(他に打てる席があれば移る)`; }
+  else if (last === 'W' && my === 'm0') { v.className = 'status stop'; v.textContent = '外れで戻し幅が 1200 を割った: ヤメ'; }
+  else if (nw === 1 && last === 'W') { v.className = 'status wait'; v.textContent = '外れ 1 回目: 戻し幅が帯に残っていれば続行(次も外れならヤメ)'; }
+  else { v.className = 'status go'; v.textContent = code === 'E0' ? '点火直後: 当たるまで打つ(途中の見切りは損)' : '続行'; }
+  if (!s || !s.S2) { $('kpi').innerHTML = `<div><span class="v">n=${s ? s.n : 0}</span><span class="k">該当が少なく数値なし</span></div>`; $('stateSub').textContent = ''; }
+  else {
+    const r = s.S2;
+    $('kpi').innerHTML = [[yen(r.net), `先の期待値(${fmt(r.net)}枚)`, cls(r.net)], [`${r.roi.toFixed(1)}%`, `ROI(投資 ${Math.round(r.g)}G)`, rcls(r.roi)], [`${r.next3.toFixed(0)}%`, '次が3連以上', r.next3 >= 60 ? 'pos' : r.next3 < 45 ? 'neg' : '']]
+      .map(([a, b, c]) => `<div class="${c}"><span class="v">${a}</span><span class="k">${b}</span></div>`).join('');
+    $('stateSub').textContent = `${s.name} | 負けで終わる ${r.lose}% | 1Gあたり ${fmt(r.per_g, 2)}枚 | 本形式 n=${s.n}` + (sa && sa.S2 ? ` | 全25日 ${yen(sa.S2.net)} ${sa.S2.roi.toFixed(1)}% (n=${sa.n})` : '');
+  }
+  markState(code);
+}
+function renderSets(off) {
+  const a = $('s1').value, b = $('s2').value, sv = $('setV'), c2 = DATA.sets_rule.cont2, c3 = DATA.sets_rule.cont3, SR = DATA.sets_rule;
+  if (!off) $('s2').disabled = a !== 'a';
+  const out = (k, t, n) => { sv.className = 'status ' + k; sv.textContent = t; $('setNote').textContent = n; };
+  if (off) out('na', '①②の条件を満たすと使えます', '');
+  else if (!a) out('na', '⑦を選んでください', '');
+  else if (a === 'd') out('stop', `2連型: 2連で終わる見込み(3セット目へ ${c2[2].rate}%)`, '2連で終わっても型どおり(外れではない)');
+  else if (a === 'c') out('wait', `2連か3連の境目(3セット目へ ${c2[1].rate}%)`, '2連で終わったら半外れ');
+  else if (a === 'b') out('go', `3連型: 3セット目まで来る(${c2[0].rate}%)、4セット目は ${SR.cont3_h1big.rate}%`, '2セット目の大きさは関係なし');
+  else if (!b) out('go', `3セット目まで来る(${c2[0].rate}%)。2セット目で 3連か 4連か決まる`, '2セット目が 140 未満なら 4連型');
+  else if (b === 'a') out('go', `4連型: 4セット目へ ${c3[0].rate}%、5セット目へ ${SR.cont4.rate}%`, '3連で止まったら外れ');
+  else if (b === 'b') out('wait', `3連か4連の境目(4セット目へ ${c3[1].rate}%)`, '');
+  else out('go', `3連型: 4セット目へ ${c3[2].rate}%`, '3連で終われば型どおり');
+}
+function markState(code) { document.querySelectorAll('#stateTable tr').forEach(tr => tr.classList.toggle('cur', tr.dataset.code === code)); }
+
+// ---------- 表
+(function () {
+  let h = '<table><thead><tr><th>最下点＼MY</th>' + DATA.my_bands.map(b => `<th>${b.label.replace(' 全体', '')}</th>`).join('') + '</tr></thead><tbody>';
+  DATA.sink_bands.forEach(sb => {
+    h += `<tr><td class="lab">${sb.label}</td>` + DATA.my_bands.map(mb => { const e = E[sb.code + '|' + mb.code + '|hon']; if (!e || !e.S2) return `<td>n=${e ? e.n : 0}</td>`; const r = e.S2; return `<td class="${cls(r.net)}" data-key="${sb.code}|${mb.code}">${yen(r.net)}<br><span class="${rcls(r.roi)}" style="font-size:10.5px">${r.roi.toFixed(0)}%</span></td>`; }).join('') + '</tr>';
+  });
+  $('entryBox').innerHTML = h + '</tbody></table><p class="sub">採用案で打った場合の平均純増と ROI(本形式9日)。門の外(沈み幅 −500 より浅い)は戻し幅が高くてもマイナス。</p>';
+  const rows = DATA.km.band_all.rows;
+  let k = '<table><thead><tr><th>着席G</th><th>サンプル数</th><th>初当り</th><th>RUSH_TY</th><th>期待値(円)</th><th>ROI%</th></tr></thead><tbody>';
+  Object.keys(rows).map(Number).sort((x, y) => x - y).forEach(gk => { const r = rows[gk]; k += `<tr><td style="background:var(--gcol);font-weight:bold">${gk}G</td><td>${r.n.toLocaleString()}</td><td>1/${r.hit}</td><td>${r.ty}</td><td class="${cls(r.ev)}">${yen(r.ev)}</td><td class="${rcls(r.roi)}">${r.roi.toFixed(1)}</td></tr>`; });
+  $('kmBox').innerHTML = k + '</tbody></table><p class="sub">門を通った戻し帯の台に何Gハマった時点で座るか(KM、1回の当たりまで、繋ぎ8G込み、本形式9日)。</p>';
+  let t = '<table><thead><tr><th>状態</th><th>n</th><th>次3連+</th><th>期待値(円)</th><th>ROI%</th></tr></thead><tbody>';
+  DATA.state_order.forEach(code => { const s = ST[code + '|hon']; const c = s && s.S2 ? `<td>${s.n}</td><td>${s.S2.next3.toFixed(0)}%</td><td class="${cls(s.S2.net)}">${yen(s.S2.net)}</td><td class="${rcls(s.S2.roi)}">${s.S2.roi.toFixed(1)}</td>` : `<td>${s ? s.n : 0}</td><td colspan="3">n不足</td>`; t += `<tr data-code="${code}"><td class="lab">${s.name}</td>${c}</tr>`; });
+  $('stateTable').innerHTML = t + '</tbody></table><p class="sub">本形式9日、採用案で続けた場合の先の期待値。</p>';
+})();
+$('terms').innerHTML = Object.entries(M.terms).map(([k, v]) => `<b>${k}</b>: ${v}`).join('<br>') + `<br><br><b>採用案</b>: ${M.rules.S2}<br><b>参考(外れ回数を見ない)</b>: ${M.rules.P5}<br><br>すべて in-sample(同じデータで発見して評価)。差枚は推定値(通常時 ${M.jungen}枚/G)。記録不良セッションは除外。`;
+render();
+</script>
+</body>
+</html>
